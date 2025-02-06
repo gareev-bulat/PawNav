@@ -5,7 +5,7 @@ const App = () => {
     return (
       <SafeAreaView>
         <View style={{ backgroundColor: "blue" }}>
-          <Text>Current Weathskbfsdkjfkdsjcer</Text>
+          <Text>Current Weather</Text>
         </View>
       </SafeAreaView>
     );
