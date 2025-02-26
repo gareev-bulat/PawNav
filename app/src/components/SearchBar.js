@@ -1,0 +1,75 @@
+import { View, Text } from 'react-native'
+import SearchBar from "react-native-dynamic-search-bar";
+import { useEffect, useState } from 'react';
+import * as Constants from '../utilities/constants';
+import PopUpList from './PopUpList';
+
+
+function dataFetch(address) {
+    const apiKey = "AIzaSyDCZ1LBNnvoHXK_IZX95lONX4xzAjz4faw";
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+  
+    return fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+          if (data['status'] !== 'ZERO_RESULTS')
+              return data["results"][0]["geometry"]["location"]     
+      })
+      .catch((error) => {console.error("Error:", error);
+      throw error;});
+  }
+  
+export function CoordinatesSetter(location){
+    return location;
+}
+
+
+const SearchComponent = () => {
+
+    const [text, setText] = useState('')
+    const [ListState, setListState] = useState(false)
+
+    useEffect(() => {
+        if (text !== ''){
+            dataFetch(text)
+           .then(location => {
+              if (location !== undefined){
+                  console.log("Search result: ", CoordinatesSetter(location));
+                  CoordinatesSetter(location);
+              }
+              else{
+                console.log("no results");
+              }
+           })
+           .catch (error => {
+               console.log(error);
+           });
+        }
+    }, [text])
+
+
+    return (
+      <View style={{flex : 1}}>
+      <SearchBar
+        style={{
+          width: "100%",
+          height: "6%",
+          paddingTop: 5,
+          borderWidth: 1.4,
+          borderColor: Constants.DARK_RED,
+        }}
+        placeholder="Search"
+        onFocus={() => {
+            console.log("Search bar focused");
+            setListState(true);
+        }}
+        onChangeText={(text) => setText(text)}
+      />
+      {ListState && <PopUpList />}
+
+      </View>
+    );
+
+}
+
+export default SearchComponent; 
