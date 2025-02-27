@@ -3,7 +3,7 @@ import { View, Text,  StyleSheet } from 'react-native'
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 
-const App = () => {
+const Maps = () => {
   return (
     <View style={styles.container}>
       <MapView
@@ -23,6 +23,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 1,
   },
   map: {
     width: '100%',
@@ -30,4 +31,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Maps;

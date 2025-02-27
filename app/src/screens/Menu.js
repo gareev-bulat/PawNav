@@ -8,23 +8,29 @@ import SearchComponent from "../components/SearchBar";
 const Menu = () => {
     return (
       <View style={styles.container}>
-        <SearchComponent style={styles.search}/>
-        <Maps />
+        <Maps style={styles.map} />
+        <View style={styles.search}>
+          <SearchComponent />
+        </View>
       </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        position: 'relative',
-        width: '100%',
-        height: '100%',
+        flex: 1
+    },
+    map: {
+      position: 'absolute',
+      zIndex: 1,
+      
     },
     search: {
         position: 'absolute',
+        width: '100%',
+        top: 20,
         zIndex: 2,
     },
-   
 })
 
 

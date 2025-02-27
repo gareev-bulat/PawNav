@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text,  TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import SearchBar from "react-native-dynamic-search-bar";
 import { useEffect, useState } from 'react';
 import * as Constants from '../utilities/constants';
@@ -49,25 +49,36 @@ const SearchComponent = () => {
 
 
     return (
-      <View style={{flex : 1}}>
-      <SearchBar
-        style={{
-          width: "100%",
-          height: "6%",
-          paddingTop: 5,
-          borderWidth: 1.4,
-          borderColor: Constants.DARK_RED,
-        }}
-        placeholder="Search"
-        onFocus={() => {
-            console.log("Search bar focused");
-            setListState(true);
-        }}
-        onChangeText={(text) => setText(text)}
-      />
-      {ListState && <PopUpList />}
-
-      </View>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View>
+          <TextInput
+            style={{
+              width: "94%",
+              right: "3%",
+              left: "3%",
+              height: 45,
+              borderRadius: 20,
+              borderWidth: 1.47,
+              paddingLeft: 20,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              borderColor: Constants.DARK_RED,
+            }}
+            placeholder="Search"
+            onFocus={() => {
+              console.log("open");
+              setListState(true);
+            }}
+            onBlur={() => {
+              console.log("close");
+              setListState(false);
+            }}
+            onChangeText={(text) => setText(text)}
+          />
+          <View>
+          <PopUpList state={ListState} />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     );
 
 }
