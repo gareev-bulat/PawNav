@@ -1,17 +1,21 @@
-import React from 'react'
-import { FlatList, SafeAreaView, View, Text, StyleSheet } from 'react-native'
-import { DataBase } from '../utilities/data';
+import React, { useState } from 'react';
+import { FlatList, SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import DataBase from '../utilities/data';
 import * as Constants from '../utilities/constants';
+import Maps from './Maps';
 
 
-const Item = ({name}) => (
-    <View style={styles.elem}>
+
+const Item = ({name, location}) => { 
+  console.log(location);
+
+  return (
+    <TouchableOpacity onPress={() => Maps(location)} style={styles.elem}>
         <Text style={styles.text}>{name}</Text>
-    </View>
-);
+    </TouchableOpacity>)
+};
 
 const PopUpList = ({ state }) => {
-  console.log(state);
   if (!state){
     return null;
   }
@@ -20,7 +24,7 @@ const PopUpList = ({ state }) => {
       <View style={styles.popUpList}>
         <FlatList 
           data={DataBase}
-          renderItem={({ item }) => <Item name={item.name} />}
+          renderItem={({ item }) => <Item name={item.name} location={item.location} />}
           keyExtractor={(item) => item.id}
         />
       </View>

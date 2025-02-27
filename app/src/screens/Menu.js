@@ -5,10 +5,18 @@ import Maps from '../components/Maps'
 import SearchComponent from "../components/SearchBar";
 
 
+let region = {
+  latitude: 45.95656,
+  longitude: -75.19,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+}
+
+
 const Menu = () => {
     return (
       <View style={styles.container}>
-        <Maps style={styles.map} />
+        <Maps style={styles.map} region={region}/>
         <View style={styles.search}>
           <SearchComponent />
         </View>
