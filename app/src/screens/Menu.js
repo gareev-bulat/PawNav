@@ -1,26 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Maps from '../components/Maps'
 import SearchComponent from "../components/SearchBar";
-
-
-let region = {
-  latitude: 45.95656,
-  longitude: -75.19,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-}
+import { Marker } from "react-native-maps";
+import * as Location from 'expo-location';
+import { MapPrompts } from '../components/MapPrompts';
+import PopUpList from "../components/PopUpList";
 
 
 const Menu = () => {
+
+
+  const [prompts, setPrompts] = useState({
+    UserRegion: {},
+    DestinationRegion: {}
+  });
+   
+    useEffect(() => {
+
+      const getLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted"){return;}
+        let location = await Location.getCurrentPositionAsync({});
+        location.coords.latitudeDelta = 0.05
+        location.coords.longitudeDelta = 0.05
+        setPrompts(prev => ({ ...prev, UserRegion: location.coords }));
+      };
+
+      getLocation();
+
+    }, []);
     return (
-      <View style={styles.container}>
-        <Maps style={styles.map} region={region}/>
-        <View style={styles.search}>
-          <SearchComponent />
+      <MapPrompts.Provider value={{prompts, setPrompts}}>
+        <View style={styles.container}>
+          <Maps style={styles.map} />
+          <View style={styles.search}>
+            <SearchComponent />
+          </View>
+          <PopUpList />
         </View>
-      </View>
+      </MapPrompts.Provider>
     );
 }
 

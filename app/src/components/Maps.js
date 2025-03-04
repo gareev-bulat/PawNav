@@ -1,41 +1,53 @@
-import React, { useRef, useEffect} from 'react';
-import { View, Text,  StyleSheet } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import React, { useRef, useEffect, useContext } from 'react';
+import { View, StyleSheet } from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import { MapPrompts } from './MapPrompts';
 
+const Maps = () => {
+  const { prompts } = useContext(MapPrompts);
+  const mapReference = useRef(null);
 
+  const mapRegion = prompts.DestinationRegion && prompts.DestinationRegion.latitude
+      ? prompts.DestinationRegion
+      : prompts.UserRegion;
 
-
-const Maps = ({region}) => {
-
-  //const mapReference = useRef(null);
-  
-
-  /*const moveToLocation = (name, location) => {
-    console.log(name);
-    console.log(location);
+  const animateToDestination = (destination) => {
     if (mapReference.current) {
-      mapReference.current.animateToRegion({
-        latitude: 45.95656,
-        longitude: -75.19,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-  
-      })
-    }*/
+      mapReference.current.animateCamera(
+        {
+          center: destination,
+          pitch: 0,
+          heading: 0,
+          altitude: 1500,
+          zoom: 14,
+        },
+        { duration: 3000 }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (prompts.DestinationRegion && prompts.DestinationRegion.latitude) {
+      animateToDestination(prompts.DestinationRegion);
+    }
+  }, [prompts.DestinationRegion]);
 
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapReference}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        initialRegion={{
-          region
-        }}
-      />
+        initialRegion={mapRegion}
+        showsUserLocation={true}
+      >
+        {prompts.DestinationRegion && prompts.DestinationRegion.latitude && (
+          <Marker coordinate={prompts.DestinationRegion} />
+        )}
+      </MapView>
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

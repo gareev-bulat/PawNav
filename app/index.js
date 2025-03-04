@@ -8,7 +8,6 @@ import SignInPage from './src/screens/SignInPage';
 const App = () => {
     return (
       <SignInPage />
-      
     );
 }
 
