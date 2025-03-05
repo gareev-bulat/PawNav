@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { MapPrompts } from './MapPrompts';
 
 const Maps = () => {
   const { prompts } = useContext(MapPrompts);
   const mapReference = useRef(null);
+  console.log("user-location", prompts.UserRegion)
 
   const mapRegion = prompts.DestinationRegion && prompts.DestinationRegion.latitude
       ? prompts.DestinationRegion
@@ -42,7 +43,13 @@ const Maps = () => {
         showsUserLocation={true}
       >
         {prompts.DestinationRegion && prompts.DestinationRegion.latitude && (
-          <Marker coordinate={prompts.DestinationRegion} />
+          <Marker coordinate={prompts.DestinationRegion}>
+            <Image
+            source={require('../../assets/images/Menu_icon.png')}
+            style={styles.markerImage}
+            resizeMode="contain"
+          />
+          </Marker>
         )}
       </MapView>
     </View>
@@ -50,6 +57,16 @@ const Maps = () => {
 };
 
 const styles = StyleSheet.create({
+  markerImage: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderWidth: 5,
+    borderColor: 'white',
+    borderBottomRightRadius: 0.1,
+    width: 45,
+    height: 45,
+  },
+
   container: {
     flex: 1,
     zIndex: 1,
