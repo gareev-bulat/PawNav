@@ -7,7 +7,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     },
-    id: "1",
+    id: 1,
   },
   {
     name: "Shelter2",
@@ -17,7 +17,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
       },
-    id: "2",
+    id: 2,
   },
   {
     name: "Shelter3",
@@ -27,7 +27,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
       },
-    id: "3",
+    id: 3,
   },
   {
     name: "Shelter4",
@@ -37,7 +37,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
       },
-    id: "4",
+    id: 4,
   },
   {
     name: "Shelter5",
@@ -47,7 +47,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
       },
-    id: "5",
+    id: 5,
   },
 ];
 
