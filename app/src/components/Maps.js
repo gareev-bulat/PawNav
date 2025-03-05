@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useContext } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { MapPrompts } from './MapPrompts';
 
@@ -43,7 +43,7 @@ const Maps = () => {
         showsUserLocation={true}
       >
         {prompts.DestinationRegion && prompts.DestinationRegion.latitude && (
-          <Marker coordinate={prompts.DestinationRegion}>
+          <Marker coordinate={prompts.DestinationRegion} onPress={() => alert(prompts.Name)}>
             <Image
             source={require('../../assets/images/Menu_icon.png')}
             style={styles.markerImage}
