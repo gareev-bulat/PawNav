@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFonts } from 'expo-font';
 import Tabs from '../components/Tabs';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import constants from '../utilities/constants';
+import * as Constants from '../utilities/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const SignInPage = ({ navigation }) => {
@@ -36,6 +36,7 @@ const SignInPage = ({ navigation }) => {
         style={styles.shelter_image}
         source={require("../../assets/images/Menu_icon.png")}
       />
+      <Text style={styles.appname}>PawNav</Text>
       <Text style={styles.title}>Username:</Text>
       <TextInput
         style={styles.input}
@@ -73,6 +74,13 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
     backgroundColor: '#f5f5f5',
   },
+
+  appname: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    paddingBottom: 50,
+  },
+
   title: {
     fontSize: 15,
     fontWeight: 'bold',
@@ -86,7 +94,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 15,
-    borderColor: constants.DARK_RED,
+    borderColor: Constants.DARK_RED,
     paddingHorizontal: 10,
     marginBottom: 25,
     fontFamily: 'CustomFont',
@@ -115,7 +123,7 @@ const styles = StyleSheet.create({
   },
   shelter_image: {
     justifyContent: 'center',
-    marginBottom: 80,
+    marginBottom: 50,
     width: 100,
     height: 100,
     resizeMode: 'contain'

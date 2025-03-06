@@ -3,10 +3,15 @@ import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native
 import DataBase from '../utilities/data';
 import * as Constants from '../utilities/constants';
 import { MapPrompts } from '../components/MapPrompts';
+import { getPreciseDistance } from 'geolib';
+
 
 const PopUpList = ({ isVisible, onItemPress }) => {
-  const { setPrompts } = useContext(MapPrompts);
 
+  const { setPrompts } = useContext(MapPrompts);
+  const { prompts } = useContext(MapPrompts);
+
+  
   if (!isVisible) return null;
 
   return (
@@ -16,7 +21,7 @@ const PopUpList = ({ isVisible, onItemPress }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={styles.elem}
+            style={[styles.elem, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}
             onPress={() => {
               setPrompts((prev) => ({
                 ...prev,
@@ -26,7 +31,9 @@ const PopUpList = ({ isVisible, onItemPress }) => {
               if (onItemPress) onItemPress();
             }}
           >
-            <Text style={styles.text}>{item.name}</Text>
+          
+            <Text style={styles.shelterName}>{item.name}</Text>
+            <Text style={styles.shelterDistance}>{getPreciseDistance(prompts.UserRegion, item.location).toFixed(1)} mi</Text>
           </TouchableOpacity>
         )}
       />
@@ -50,15 +57,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     zIndex: 999,
   },
+
   elem: {
     borderBottomWidth: 1,
     borderColor: Constants.DARK_RED,
     paddingTop: 15,
     height: 50,
   },
-  text: {
+
+  shelterName: {
     fontSize: 20,
-    paddingLeft: 10,
-    textAlignVertical: 'center',
+    
   },
+
+  shelterDistance: {
+    fontSize: 15,
+    color: '#A9A9A9',
+  },
+
 });
