@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useFonts } from 'expo-font';
 import Tabs from '../components/Tabs';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import constants from '../utilities/constants';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SignInPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -34,13 +36,14 @@ const SignInPage = ({ navigation }) => {
         style={styles.shelter_image}
         source={require("../../assets/images/Menu_icon.png")}
       />
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.title}>Username:</Text>
       <TextInput
         style={styles.input}
         placeholder="username"
         value={username}
         onChangeText={setUsername}
       />
+      <Text style={styles.title}>Password:</Text>
       <TextInput
         style={styles.input}
         placeholder="password"
@@ -49,8 +52,10 @@ const SignInPage = ({ navigation }) => {
         secureTextEntry
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonText}>Sign in</Text>
+      <TouchableOpacity onPress={handleSignIn}>
+        <LinearGradient colors={['#CA3232', '#641919']} style={styles.button}>
+        <Text style={styles.buttonText}>Sign In</Text>
+        </LinearGradient>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.link}>Need an account? Sign Up</Text>
@@ -69,26 +74,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 24,
+    fontSize: 15,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 10,
     fontFamily: 'CustomFont',
+    alignSelf: 'flex-start',
   },
   input: {
     width: '100%',
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
+    borderColor: constants.DARK_RED,
     paddingHorizontal: 10,
-    marginBottom: 15,
+    marginBottom: 25,
     fontFamily: 'CustomFont',
   },
   button: {
-    width: '100%',
-    backgroundColor: '#ff7f09',
+    width: 180,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
     alignItems: 'center',
     marginBottom: 10,
   },
