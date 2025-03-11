@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useContext } from 'react';
-import { View, StyleSheet, Text, Image} from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, TouchableHighlight} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from "react-native-maps";
 import { MapPrompts } from './MapPrompts';
 import DataBase from '../utilities/data';
 import * as Constants from '../utilities/constants';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 
 const styles = StyleSheet.create({

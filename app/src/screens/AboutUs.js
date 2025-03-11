@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const AboutUsPage = () => {
@@ -12,30 +12,50 @@ const AboutUsPage = () => {
                     We provide opportunities for adoption, volunteering, and donations to shelters. 
                     Currently, we focus on the Philadelphia area with plans to expand across Pennsylvania in the future.
                 </Text>
+                <Text style={[styles.title, {marginTop: 40}]}>Our Team</Text>
                 
                 <View style={[styles.section, styles.bulat]}>
-                    <Text style={styles.sectionTitle}>Bulat</Text>
+                <Image
+                    style={styles.shelter_image}
+                    source={require("../../assets/images/profile_pictures/bulat_image.jpeg")}
+                />
+                    <Text style={[styles.sectionTitle, {alignSelf: 'center'}]}>Bulat</Text>
                     <Text style={styles.description}>
                         Bulat is our product owner and dedicated to helping and fostering animal care.
                     </Text>
                 </View>
                 
+                
                 <View style={[styles.section, styles.christian]}>
-                    <Text style={styles.sectionTitle}>Christian</Text>
+                <Image
+                    style={styles.shelter_image}
+                    source={require("../../assets/images/profile_pictures/christian_image.jpeg")}
+                />
+                    <Text style={[styles.sectionTitle, {alignSelf: 'center'}]}>Christian</Text>
                     <Text style={styles.description}>
                         Christian is a pet owner whose love for dogs made him become a collaborator for this project. 
                     </Text>
                 </View>
                 
+                
                 <View style={[styles.section, styles.david]}>
-                    <Text style={styles.sectionTitle}>David</Text>
+                <Image
+                    style={styles.shelter_image}
+                    source={require("../../assets/images/profile_pictures/david_image.jpeg")}
+                />
+                    <Text style={[styles.sectionTitle, {alignSelf: 'center'}]}>David</Text>
                     <Text style={styles.description}>
                         David specializes in fundraising efforts to support shelters with food, medical care, and infrastructure.
                     </Text>
                 </View>
                 
+                
                 <View style={[styles.section, styles.ethan]}>
-                    <Text style={styles.sectionTitle}>Ethan</Text>
+                <Image
+                    style={styles.shelter_image}
+                    source={require("../../assets/images/profile_pictures/ethan_image.jpeg")}
+                />
+                    <Text style={[styles.sectionTitle, {alignSelf: 'center'}]}>Ethan</Text>
                     <Text style={styles.description}>
                         Ethan focuses on technology and innovation, improving the efficiency of shelter operations and adoption processes.
                     </Text>
@@ -71,6 +91,16 @@ const styles = StyleSheet.create({
         elevation: 3,
         width: "100%",
     },
+
+    shelter_image: {
+        height: 150,
+        width: 150,
+        marginTop: 10,
+        marginBottom: 10,
+        borderRadius: 100,
+        alignSelf: 'center'
+    },
+    
     sectionTitle: {
         fontSize: 20,
         fontWeight: "bold",

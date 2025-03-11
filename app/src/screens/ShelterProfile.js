@@ -13,7 +13,7 @@ const ShelterProfile = () => {
     let ShelterInformation = "Information"
     let ShelterLocation = "Locations"
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.name}>{ShelterName}</Text>
         </View>
@@ -27,7 +27,7 @@ const ShelterProfile = () => {
           <Text style={styles.title}>Locations:</Text>
           <Text style={styles.text}>{ShelterLocation}</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
 };
 
