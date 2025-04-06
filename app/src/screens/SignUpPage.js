@@ -6,11 +6,20 @@ import * as Constants from '../utilities/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../config/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const SignUpPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+             {label: 'Volunteer', value: 'V'},                  
+             {label: 'Shelter administrator', value: 'S'},
+               ]);
+
   const [] = useFonts({'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
   });
    
@@ -42,6 +51,34 @@ const SignUpPage = ({ navigation }) => {
         source={require("../../assets/images/Menu_icon.png")}
       />
       <Text style={styles.appname}>PawNav</Text>
+      <Text style={styles.title}>Position:</Text>
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        placeholder="position"
+        style={{
+          borderColor: Constants.DARK_RED,
+          borderWidth: 1,
+          borderRadius: 15,
+          paddingHorizontal: 10,
+          marginBottom: 30,
+          height: 40,
+        }}
+        itemStyle={{ height: 60, justifyContent: "center" }}
+        dropDownContainerStyle={{
+          borderColor: Constants.DARK_RED,
+          borderWidth: 1,
+        }}
+        listItemLabelStyle={{
+          fontFamily: 'CustomFont', 
+          fontSize: 14,
+          color: '#000',
+        }}
+      />
       <Text style={styles.title}>Email:</Text>
       <TextInput
         style={styles.input}
@@ -55,15 +92,14 @@ const SignUpPage = ({ navigation }) => {
         placeholder="password"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity onPress={handleSignUp}>
-        <LinearGradient colors={['#CA3232', '#641919']} style={styles.button}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <LinearGradient colors={["#CA3232", "#641919"]} style={styles.button}>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </LinearGradient>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('SignInPage')}>
+      <TouchableOpacity onPress={() => navigation.navigate("SignInPage")}>
         <Text style={styles.link}>Comeback to Sign In</Text>
       </TouchableOpacity>
     </View>
@@ -101,7 +137,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: Constants.DARK_RED,
     paddingHorizontal: 10,
-    marginBottom: 25,
+    marginBottom: 15,
     fontFamily: 'CustomFont',
   },
   button: {
@@ -109,7 +145,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',

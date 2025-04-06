@@ -5,9 +5,12 @@ import { useFonts } from "expo-font";
 import Maps from './src/components/Maps'
 import SignInPage from './src/screens/SignInPage';
 import SignUpPage from './src/screens/SignUpPage';
+import SettingsPage from './src/screens/SettingsPage';
+import UserProfile from './src/screens/UserProfile';
 
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+
 
 const Stack = createStackNavigator();
 
@@ -15,15 +18,30 @@ const App = () => {
     return (
       <Stack.Navigator
         initialRouteName="SignInPage"
-        screenOptions={{ 
-          headerShown: false, 
+        screenOptions={{
+          headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
         }}
-
       >
         <Stack.Screen name="SignInPage" component={SignInPage} />
         <Stack.Screen name="Tabs" component={Tabs} />
         <Stack.Screen name="SignUpPage" component={SignUpPage} />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            gestureDirection: 'horizontal-inverted',
+          }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsPage}
+          options={{
+            presentation: 'modal',
+            cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS, 
+          }}
+        />
       </Stack.Navigator>
     );
 }

@@ -17,7 +17,7 @@ const Tabs = () => {
         screenOptions={{
           tabBarShowLabel: false,
           headerShown: false,
-          tabBarStyle: {height: 50, paddingTop: 10},
+          tabBarStyle: {height: 55, paddingTop: 10},
         }}
       >
         <Tab.Screen
