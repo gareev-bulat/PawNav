@@ -5,7 +5,6 @@ import SheltersMenu from '../screens/SheltersMenu'
 import AboutUs from '../screens/AboutUs'
 import Menu from '../screens/Menu'
 import VolunteeringPage from '../screens/VolunteeringPage'
-import SignInPage from '../screens/SignInPage';
 import UserProfile from '../screens/UserProfile';
 
 const Tab = createBottomTabNavigator();

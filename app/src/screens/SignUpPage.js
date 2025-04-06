@@ -5,36 +5,35 @@ import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'reac
 import * as Constants from '../utilities/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../config/firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-const SignInPage = ({ navigation }) => {
+const SignUpPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [] = useFonts({'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
   });
-
-  const handleSignIn = () => {
+   
+  //firebase - new account
+  const handleSignUp = () => {
     if (!email || !password) {
       setError('Error: Username and password are required.');
-      alert(error);
       return;
     } 
-    //firebase part (sign in)
-    signInWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
      
       setError('');
       const user = userCredential.user;
       alert(`Welcome, ${user.email}!`);
-      navigation.navigate('Tabs'); 
+     
+      navigation.navigate('SignInPage'); 
     })
-    .catch((err) => {
-      setError('Incorrect username or password. Try again!');
-      alert(error);
+    .catch((error) => {
+      setError(error.message);
     });
-    
   };
+  //
 
   return (
     <View style={styles.container}>
@@ -49,7 +48,6 @@ const SignInPage = ({ navigation }) => {
         placeholder="email"
         value={email}
         onChangeText={setEmail}
-        autoCapitalize="none"
       />
       <Text style={styles.title}>Password:</Text>
       <TextInput
@@ -58,15 +56,15 @@ const SignInPage = ({ navigation }) => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        autoCapitalize="none"
       />
-      <TouchableOpacity onPress={handleSignIn}>
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+      <TouchableOpacity onPress={handleSignUp}>
         <LinearGradient colors={['#CA3232', '#641919']} style={styles.button}>
-        <Text style={styles.buttonText}>Sign In</Text>
+        <Text style={styles.buttonText}>Sign Up</Text>
         </LinearGradient>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('SignUpPage')}>
-        <Text style={styles.link}>Need an account? Sign Up</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('SignInPage')}>
+        <Text style={styles.link}>Comeback to Sign In</Text>
       </TouchableOpacity>
     </View>
   );
@@ -139,4 +137,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SignInPage;
+export default SignUpPage;
