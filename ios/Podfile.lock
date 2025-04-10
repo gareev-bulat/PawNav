@@ -6,7 +6,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.8):
     - ExpoModulesCore
-  - Expo (52.0.43):
+  - Expo (52.0.44):
     - ExpoModulesCore
   - expo-dev-client (5.0.19):
     - EXManifests
@@ -2136,7 +2136,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-google-maps (from `/Users/bulatgareev/Desktop/pawnav/node_modules/react-native-maps`)
+  - react-native-google-maps (from `/Users/David/Desktop/pawnav/node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -2301,7 +2301,7 @@ EXTERNAL SOURCES:
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-google-maps:
-    :path: "/Users/bulatgareev/Desktop/pawnav/node_modules/react-native-maps"
+    :path: "/Users/David/Desktop/pawnav/node_modules/react-native-maps"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-safe-area-context:
@@ -2381,7 +2381,7 @@ SPEC CHECKSUMS:
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: a19d50504b8826546a4782770317bc83fffec87d
-  Expo: fa1475866d71a99d36fccaf9983a76b681e7da8d
+  Expo: 75e002fc29a18a72aa3db967b41b29c2b206875d
   expo-dev-client: e9b595bdf169c8f26c1e4c88af1e67172d1f872c
   expo-dev-launcher: 6c53b34ddbd6afa8c28f42338886831907688ce8
   expo-dev-menu: 9b01bb8fb3f1f9dee26ce82f74e2e35a7031ec19
