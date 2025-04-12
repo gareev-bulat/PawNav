@@ -4,11 +4,15 @@ import Tabs from '../components/Tabs';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import * as Constants from '../utilities/constants';
 import { LinearGradient } from 'expo-linear-gradient';
-import { auth } from '../../config/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { auth, db } from '../../config/firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+
 
 const SignUpPage = ({ navigation }) => {
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,23 +28,29 @@ const SignUpPage = ({ navigation }) => {
   });
    
   //firebase - new account
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email || !password) {
       setError('Error: Username and password are required.');
       return;
     } 
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-     
+    try {
+      
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+  
+   
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        name: name,
+        surname: surname,        
+        createdAt: Date.now(),
+      });
+  
       setError('');
-      const user = userCredential.user;
       alert(`Welcome, ${user.email}!`);
-     
-      navigation.navigate('SignInPage'); 
-    })
-    .catch((error) => {
-      setError(error.message);
-    });
+      navigation.navigate('SignInPage');
+    } catch (err) {
+      setError(err.message);
+    }
   };
   //
 
@@ -51,7 +61,21 @@ const SignUpPage = ({ navigation }) => {
         source={require("../../assets/images/Menu_icon.png")}
       />
       <Text style={styles.appname}>PawNav</Text>
-      <Text style={styles.title}>Position:</Text>
+      <Text style={styles.title}>Name:</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="name"
+        value={name}
+        onChangeText={setName}
+      />
+      <Text style={styles.title}>Surname:</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="surname"
+        value={surname}
+        onChangeText={setSurname}
+      />
+      {/*<Text style={styles.title}>Position:</Text>
       <DropDownPicker
         open={open}
         value={value}
@@ -78,7 +102,7 @@ const SignUpPage = ({ navigation }) => {
           fontSize: 14,
           color: '#000',
         }}
-      />
+      />*/}
       <Text style={styles.title}>Email:</Text>
       <TextInput
         style={styles.input}
@@ -112,14 +136,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    paddingBottom: 50,
+    paddingBottom: 40,
     backgroundColor: '#f5f5f5',
   },
 
   appname: {
     fontSize: 30,
     fontWeight: 'bold',
-    paddingBottom: 50,
+    paddingBottom: 40,
   },
 
   title: {
@@ -164,7 +188,7 @@ const styles = StyleSheet.create({
   },
   shelter_image: {
     justifyContent: 'center',
-    marginBottom: 50,
+    marginBottom: 40,
     width: 100,
     height: 100,
     resizeMode: 'contain'
