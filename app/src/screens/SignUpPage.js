@@ -16,7 +16,7 @@ const SignUpPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -109,14 +109,28 @@ const SignUpPage = ({ navigation }) => {
         placeholder="email"
         value={email}
         onChangeText={setEmail}
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="email-address'"
       />
       <Text style={styles.title}>Password:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="password"
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="password"
+          value={password}
+          onChangeText={setPassword}
+          autoCapitalize="none"
+          autoCorrect={false}
+          secureTextEntry={!passwordVisible}
+          textContentType="newPassword"
+        />
+        <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+          <Text style={styles.toggleText}>
+            {passwordVisible ? 'Hide' : 'Show'}
+          </Text>
+        </TouchableOpacity>
+      </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity onPress={handleSignUp}>
         <LinearGradient colors={["#CA3232", "#641919"]} style={styles.button}>
@@ -194,7 +208,29 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
     
 
-  }
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    borderColor: Constants.DARK_RED,
+    borderWidth: 1,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    fontFamily: 'CustomFont',
+  },
+  toggleText: {
+    color: '#CA3232',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontFamily: 'CustomFont',
+  },
+  
 });
 
 export default SignUpPage;

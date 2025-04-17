@@ -56,7 +56,7 @@ const UserProfile = ({ navigation }) => {
   let ProfileSurname = userData?.surname || "Surname";
   let ProfileStatus = userData?.status || "Status example";
   let ProfileRole = userData?.role || "Role";
-  let ProfileFav = userData?.favourites || "List of favourite shelters";
+  let ProfileFav = userData?.favourites || "Favourite shelter #1";
 
   return (
     <SafeAreaView style={styles.container}>
