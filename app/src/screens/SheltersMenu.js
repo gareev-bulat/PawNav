@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, TextInput } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const shelters = [
@@ -48,10 +48,20 @@ const ShelterProfile = ({ shelter }) => (
     />
     <View style={styles.cardContent}>
       <Text style={styles.shelterName}>{shelter.name}</Text>
+      <Text style={styles.shelterDetail}>📍 {shelter.address}</Text>
+      <Text style={styles.shelterDetail}>📞 {shelter.phone}</Text>
+      <Text style={styles.shelterDetail}>🏠 Capacity: {shelter.capacity}</Text>
+
       <View style={styles.metaRow}>
-        <Text style={styles.metaText}>🕚 11 am - 1 pm</Text>
-        <Text style={styles.metaText}>👤 32</Text>
-        <Text style={styles.metaText}>🐾 32</Text>
+        <View style={styles.metaPill}>
+          <Text style={styles.metaPillText}>🕚 11 am - 1 pm</Text>
+        </View>
+        <View style={styles.metaPill}>
+          <Text style={styles.metaPillText}>👤 32</Text>
+        </View>
+        <View style={styles.metaPill}>
+          <Text style={styles.metaPillText}>🐾 32</Text>
+        </View>
       </View>
     </View>
   </View>
@@ -85,13 +95,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#f0f4f8",
   },
   title: {
     fontSize: 24,
     marginBottom: 12,
     fontWeight: "bold",
     textAlign: "center",
+    color: "#333",
   },
   searchInput: {
     borderWidth: 1,
@@ -100,12 +111,13 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 16,
     fontSize: 16,
+    backgroundColor: "#fff",
   },
   card: {
-    backgroundColor: "#f9f9f9",
-    borderRadius: 16,
+    backgroundColor: "#ffffff",
+    borderRadius: 20,
     overflow: "hidden",
-    marginBottom: 16,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -117,23 +129,40 @@ const styles = StyleSheet.create({
     height: 150,
   },
   cardContent: {
-    padding: 12,
+    padding: 14,
+    backgroundColor: "#faf8ff",
   },
   shelterName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 6,
+    color: "#673ab7",
+  },
+  shelterDetail: {
+    fontSize: 14,
+    color: "#444",
+    marginBottom: 3,
   },
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 12,
   },
-  metaText: {
-    fontSize: 14,
-    color: "#555",
+  metaPill: {
+    backgroundColor: "#e0e0e0",
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+  },
+  metaPillText: {
+    fontSize: 13,
+    color: "#333",
   },
 });
 
 export default SheltersMenu;
+
+
+
 
 
