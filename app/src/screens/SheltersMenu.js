@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const shelters = [
@@ -40,44 +40,42 @@ const shelters = [
   },
 ];
 
-const ShelterProfile = ({ shelter, isFavorite, onToggleFavorite }) => (
-  <View style={styles.shelterCard}>
-    <Text style={styles.shelterName}>{shelter.name}</Text>
-    <Text>Address: {shelter.address}</Text>
-    <Text>Phone: {shelter.phone}</Text>
-    <Text>Capacity: {shelter.capacity}</Text>
-    <TouchableOpacity onPress={onToggleFavorite}>
-      <Text style={{ color: isFavorite ? "red" : "blue", marginTop: 6 }}>
-        {isFavorite ? "Unfavorite" : "Favorite"}
-      </Text>
-    </TouchableOpacity>
+const ShelterProfile = ({ shelter }) => (
+  <View style={styles.card}>
+    <Image
+      source={{ uri: "https://via.placeholder.com/300x150.png?text=Shelter+Image" }}
+      style={styles.image}
+    />
+    <View style={styles.cardContent}>
+      <Text style={styles.shelterName}>{shelter.name}</Text>
+      <View style={styles.metaRow}>
+        <Text style={styles.metaText}>🕚 11 am - 1 pm</Text>
+        <Text style={styles.metaText}>👤 32</Text>
+        <Text style={styles.metaText}>🐾 32</Text>
+      </View>
+    </View>
   </View>
 );
 
 const SheltersMenu = () => {
-  const [favorites, setFavorites] = useState([]);
+  const [search, setSearch] = useState("");
 
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
-    );
-  };
-
-  const renderItem = ({ item }) => (
-    <ShelterProfile
-      shelter={item}
-      isFavorite={favorites.includes(item.id)}
-      onToggleFavorite={() => toggleFavorite(item.id)}
-    />
-  );
+  const renderItem = ({ item }) => <ShelterProfile shelter={item} />;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Available Shelters</Text>
+      <Text style={styles.title}>Shelters’ Menu</Text>
+      <TextInput
+        placeholder="Search shelters..."
+        value={search}
+        onChangeText={setSearch}
+        style={styles.searchInput}
+      />
       <FlatList
         data={shelters}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 16 }}
       />
     </SafeAreaView>
   );
@@ -87,27 +85,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 24,
-    marginBottom: 16,
+    marginBottom: 12,
     fontWeight: "bold",
     textAlign: "center",
   },
-  shelterCard: {
-    padding: 16,
+  searchInput: {
     borderWidth: 1,
-    borderRadius: 8,
     borderColor: "#ccc",
-    marginBottom: 12,
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 16,
+    fontSize: 16,
+  },
+  card: {
     backgroundColor: "#f9f9f9",
+    borderRadius: 16,
+    overflow: "hidden",
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  image: {
+    width: "100%",
+    height: 150,
+  },
+  cardContent: {
+    padding: 12,
   },
   shelterName: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 4,
+    marginBottom: 8,
+  },
+  metaRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  metaText: {
+    fontSize: 14,
+    color: "#555",
   },
 });
 
 export default SheltersMenu;
+
 
