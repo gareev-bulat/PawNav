@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, FlatList, Image, TextInput } from "react-native";
+import { StyleSheet, View, Text, FlatList, Image, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const shelters = [
@@ -40,12 +40,14 @@ const shelters = [
   },
 ];
 
-const ShelterProfile = ({ shelter }) => (
+const ShelterComponent = ({ shelter,  navigation}) => (
+  <TouchableOpacity onPress={() => navigation.navigate('ShelterProfile')}>
   <View style={styles.card}>
     <Image
-      source={{ uri: "https://via.placeholder.com/300x150.png?text=Shelter+Image" }}
-      style={styles.image}
+        style={styles.shelter_image}
+        source={require("../../assets/images/animal_shelter_image_profile.webp")}
     />
+    
     <View style={styles.cardContent}>
       <Text style={styles.shelterName}>{shelter.name}</Text>
       <Text style={styles.shelterDetail}>📍 {shelter.address}</Text>
@@ -64,17 +66,18 @@ const ShelterProfile = ({ shelter }) => (
         </View>
       </View>
     </View>
+   
   </View>
+  </TouchableOpacity>
 );
 
-const SheltersMenu = () => {
+const SheltersMenu = ( { navigation } ) => {
   const [search, setSearch] = useState("");
 
-  const renderItem = ({ item }) => <ShelterProfile shelter={item} />;
+  const renderItem = ({ item }) => <ShelterComponent shelter={item} navigation={navigation}/>;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Shelters’ Menu</Text>
       <TextInput
         placeholder="Search shelters..."
         value={search}
@@ -103,6 +106,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "#333",
+  },
+  shelter_image: {
+    width: "100%",
+    height: 150,
   },
   searchInput: {
     borderWidth: 1,

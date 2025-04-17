@@ -7,9 +7,12 @@ import SignInPage from './src/screens/SignInPage';
 import SignUpPage from './src/screens/SignUpPage';
 import SettingsPage from './src/screens/SettingsPage';
 import UserProfile from './src/screens/UserProfile';
+import ShelterProfile from './src/screens/ShelterProfile';
+
 
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import SheltersMenu from './src/screens/SheltersMenu';
 
 
 const Stack = createStackNavigator();
@@ -23,6 +26,8 @@ const App = () => {
           cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
         }}
       >
+        <Stack.Screen name="SheltersMenu" component={SheltersMenu} />
+        <Stack.Screen name="ShelterProfile" component={ShelterProfile} options={{presentation: 'modal'}}/>
         <Stack.Screen name="SignInPage" component={SignInPage} />
         <Stack.Screen name="Tabs" component={Tabs} />
         <Stack.Screen name="SignUpPage" component={SignUpPage} />

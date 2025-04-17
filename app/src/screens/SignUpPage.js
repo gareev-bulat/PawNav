@@ -111,7 +111,7 @@ const SignUpPage = ({ navigation }) => {
         onChangeText={setEmail}
         autoCapitalize="none"
         autoCorrect={false}
-        keyboardType="email-address'"
+        keyboardType="email-address"
       />
       <Text style={styles.title}>Password:</Text>
       <View style={styles.passwordContainer}>

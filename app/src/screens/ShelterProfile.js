@@ -1,9 +1,11 @@
 import React from "react";
-import { StyleSheet, SafeAreaView, View, Text, Image } from "react-native";
+import { StyleSheet, SafeAreaView, View, Text, Image, TouchableOpacity} from "react-native";
 import { useFonts } from 'expo-font'
+import  Ionicons  from "@expo/vector-icons/Ionicons";
+import * as Constants from '../utilities/constants';
 
 
-const ShelterProfile = () => {
+const ShelterProfile = ( { navigation } ) => {
 
 
     const [] = useFonts({
@@ -28,6 +30,11 @@ const ShelterProfile = () => {
           <Text style={styles.title}>Locations:</Text>
           <Text style={styles.text}>{ShelterLocation}</Text>
         </View>
+        <View style={styles.backButton}>
+          <TouchableOpacity onPress={ () => navigation.goBack()}>
+            <Ionicons name="exit-outline" size={35} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
     );
 };
@@ -38,6 +45,12 @@ const styles = StyleSheet.create({
         padding : 15,
         alignItems: "left",
         flex: 1,
+    },
+    backButton: { 
+      position: 'absolute',
+      top: 0,
+      padding: 20,
+
     },
     header: {
         padding : 15,
