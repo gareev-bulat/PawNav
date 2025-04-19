@@ -8,6 +8,7 @@ import SignUpPage from './src/screens/SignUpPage';
 import SettingsPage from './src/screens/SettingsPage';
 import UserProfile from './src/screens/UserProfile';
 import ShelterProfile from './src/screens/ShelterProfile';
+import RollInfoPages from './src/screens/RollInfoPages'
 
 
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
@@ -31,6 +32,7 @@ const App = () => {
         <Stack.Screen name="SignInPage" component={SignInPage} />
         <Stack.Screen name="Tabs" component={Tabs} />
         <Stack.Screen name="SignUpPage" component={SignUpPage} />
+        <Stack.Screen name="RollInfoPages" component={RollInfoPages} />
         <Stack.Screen
           name="UserProfile"
           component={UserProfile}

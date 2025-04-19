@@ -57,6 +57,9 @@ const UserProfile = ({ navigation }) => {
   let ProfileStatus = userData?.status || "Status example";
   let ProfileRole = userData?.role || "Role";
   let ProfileFav = userData?.favourites || "Favourite shelter #1";
+  let ShelterOwner = userData?.owner;
+  let RegistrationStatus = userData?.registrationStatus;
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,15 +68,32 @@ const UserProfile = ({ navigation }) => {
           style={styles.profile_image}
           source={require("../../assets/images/profile_image.jpeg")}
         />
-        <Text style={styles.name}>{ProfileName} {ProfileSurname}</Text>
+        <Text style={styles.name}>
+          {ProfileName} {ProfileSurname}
+        </Text>
+        
         <View style={styles.settingsButton}>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-            <Ionicons name="settings-outline" size={40} color={Constants.DARK_RED} />
+          <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+            <Ionicons
+              name="settings-outline"
+              size={40}
+              color={Constants.DARK_RED}
+            />
           </TouchableOpacity>
         </View>
       </View>
 
       <ScrollView style={styles.body} indicatorStyle="white">
+      {ShelterOwner && (
+          <View style={styles.shelter_owner_line}>
+            <Text>🏠 New shelter registration</Text>
+            <TouchableOpacity disabled={(RegistrationStatus != "Finish registration")} style={styles.registrationButton} onPress={() => navigation.navigate("RollInfoPages")}>
+              {(RegistrationStatus == "Finish registration") && <Text style={[styles.registrationButtonText, styles.finishRegistrationColor]}>{RegistrationStatus}</Text>}
+              {(RegistrationStatus == "Pending") && <Text style={[styles.registrationButtonText, styles.PendingRegistrationColor]}>{RegistrationStatus}</Text>}
+              {(RegistrationStatus == "Approved") && <Text style={[styles.registrationButtonText, styles.ApprovedRegistrationColor]}>{RegistrationStatus}</Text>}
+            </TouchableOpacity>
+          </View>
+        )}
         <Text style={styles.title}>Status:</Text>
         <Text style={styles.text}>{ProfileStatus}</Text>
         <Text style={styles.title}>Role:</Text>
@@ -86,6 +106,42 @@ const UserProfile = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+
+  shelter_owner_line: {
+    marginTop: 5,
+    paddingTop: 5,
+    paddingBottom: 0,
+    flexDirection: 'row',
+  },
+
+  finishRegistrationColor: {
+    backgroundColor: '#FF704F',
+    borderRadius: 13,
+  },
+
+  PendingRegistrationColor: {
+    backgroundColor: '#FFE523',
+    borderRadius: 13,
+  },
+
+  ApprovedRegistrationColor: {
+    backgroundColor: '#32CA35',
+    borderRadius: 13,
+  },
+
+  registrationButtonText: {
+    fontSize: 12,
+    padding: 3,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+
+  registrationButton: {
+    width: 150,
+    height: 25,
+    marginLeft: 10,
+  },
+
   container: {
     alignItems: 'flex-start',
     flex: 1,
@@ -100,7 +156,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,  
   },
   header: {
-    padding: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20,
+    paddingBottom: 15,
     width: '100%',
     backgroundColor: "#ff7f09",
   },

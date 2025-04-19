@@ -4,6 +4,7 @@ import Tabs from '../components/Tabs';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import * as Constants from '../utilities/constants';
 import { LinearGradient } from 'expo-linear-gradient';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { auth, db } from '../../config/firebase';
@@ -17,8 +18,7 @@ const SignUpPage = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [owner, setOwner] = useState(false);
   const [items, setItems] = useState([
              {label: 'Volunteer', value: 'V'},                  
              {label: 'Shelter administrator', value: 'S'},
@@ -37,14 +37,25 @@ const SignUpPage = ({ navigation }) => {
       
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
   
-   
-      await setDoc(doc(db, 'users', user.uid), {
-        email: user.email,
-        name: name,
-        surname: surname,        
-        createdAt: Date.now(),
-      });
-  
+      if (owner){
+        await setDoc(doc(db, 'users', user.uid), {
+          email: user.email,
+          name: name,
+          surname: surname,   
+          owner: owner,
+          registrationStatus: "Finish registration",   
+          createdAt: Date.now(),
+        });
+      }
+      else{
+        await setDoc(doc(db, 'users', user.uid), {
+          email: user.email,
+          name: name,
+          surname: surname,   
+          owner: owner, 
+          createdAt: Date.now(),
+        });
+      }
       setError('');
       alert(`Welcome, ${user.email}!`);
       navigation.navigate('SignInPage');
@@ -127,10 +138,26 @@ const SignUpPage = ({ navigation }) => {
         />
         <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
           <Text style={styles.toggleText}>
-            {passwordVisible ? 'Hide' : 'Show'}
+            {passwordVisible ? "Hide" : "Show"}
           </Text>
         </TouchableOpacity>
       </View>
+
+      {/*Check box for choosing if shelter owner or not*/}
+      <View style={styles.toggleContainer}>
+        <BouncyCheckbox
+          isChecked={owner}
+          size={20}
+          fillColor='green'
+          style={{alignSelf: 'left'}}
+          onPress={() => {
+            setOwner(!owner);
+          }}
+        />
+        <Text style={styles.checkboxText}>I manage or own animal shelter</Text>
+      </View>
+      {/*************************************************/}
+
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TouchableOpacity onPress={handleSignUp}>
         <LinearGradient colors={["#CA3232", "#641919"]} style={styles.button}>
@@ -152,6 +179,14 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 40,
     backgroundColor: '#f5f5f5',
+  },
+
+  toggleContainer: {
+    flexDirection: 'row',
+  },
+
+  checkboxText: {
+    margin: 3,
   },
 
   appname: {

@@ -41,6 +41,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.7",
+    "react-native-bouncy-checkbox": "^4.1.2",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-dynamic-search-bar": "^2.0.2",
     "react-native-element-dropdown": "^2.12.4",
