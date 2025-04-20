@@ -34,7 +34,7 @@ const RollInfoPages = ({ navigation }) => {
         { merge: true }
       );
       Alert.alert("Your shelter registered successfully!");
-      navigation.navigate("UserProfile");
+      navigation.goBack();
     } catch (error) {
       Alert.alert("Error. Please try again.");
     }

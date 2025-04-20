@@ -32,7 +32,7 @@ const App = () => {
         <Stack.Screen name="SignInPage" component={SignInPage} />
         <Stack.Screen name="Tabs" component={Tabs} />
         <Stack.Screen name="SignUpPage" component={SignUpPage} />
-        <Stack.Screen name="RollInfoPages" component={RollInfoPages} />
+        <Stack.Screen name="RollInfoPages" component={RollInfoPages} options={{presentation: 'modal'}}/>
         <Stack.Screen
           name="UserProfile"
           component={UserProfile}
