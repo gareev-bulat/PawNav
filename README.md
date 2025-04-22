@@ -22,16 +22,22 @@ cd pawnav
 npm install
 # or
 yarn install
-3. Add Expo to the project
-bash
-Copy
-Edit
+
+```
+
+
+### 3. Add Expo to the project
+```bash
+
 npx expo install
+```
 4. Start the app
-bash
-Copy
-Edit
+```bash
+
 npx expo start
+
+```
+
 Run on device or simulator:
 
 Scan the QR code in Expo Go (iOS/Android app)
@@ -41,9 +47,7 @@ Press i to open iOS simulator
 Press a to open Android emulator
 
 5. Project Structure
-text
-Copy
-Edit
+
 PawNav/
 ├── .expo/                  # Expo project settings & entry point
 ├── android/                # Android native code & asset manifests
@@ -69,6 +73,8 @@ PawNav/
 ├── package.json            # Project metadata & npm scripts
 ├── README.md               # This documentation
 └── tsconfig.json           # TypeScript compiler options
+
+
 🙌 Contributors
 
 Name	Email
