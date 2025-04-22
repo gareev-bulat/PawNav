@@ -31,14 +31,14 @@ yarn install
 
 npx expo install
 ```
-4. Start the app
+### 4. Start the app
 ```bash
 
 npx expo start
 
 ```
 
-Run on device or simulator:
+## Run on device or simulator:
 
 Scan the QR code in Expo Go (iOS/Android app)
 
@@ -46,7 +46,9 @@ Press i to open iOS simulator
 
 Press a to open Android emulator
 
-5. Project Structure
+### 5. Project Structure
+
+```bash
 
 PawNav/
 ├── .expo/                  # Expo project settings & entry point
@@ -74,11 +76,15 @@ PawNav/
 ├── README.md               # This documentation
 └── tsconfig.json           # TypeScript compiler options
 
+ ```
 
-🙌 Contributors
+### 🙌 Contributors
 
+```bash
 Name	Email
 Bulat Gareev	bg679@drexel.edu
 David Fonteneau	djf338@drexel.edu
 Ethan Sarder	ers332@drexel.edu
 Christian Daccarett	cdd89@drexel.edu
+
+```
