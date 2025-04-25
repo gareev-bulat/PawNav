@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.pawnav",
+      "bundleIdentifier": "com.drexel.pawnav",
       "config": {
         "googleMapsApiKey": "AIzaSyDCZ1LBNnvoHXK_IZX95lONX4xzAjz4faw"
       }
