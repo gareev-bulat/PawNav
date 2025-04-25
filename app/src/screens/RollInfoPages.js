@@ -33,8 +33,7 @@ const RollInfoPages = ({ navigation }) => {
         },
         { merge: true }
       );
-      Alert.alert("Your shelter registered successfully!");
-      navigation.goBack();
+      navigation.navigate("QuizTemp")
     } catch (error) {
       Alert.alert("Error. Please try again.");
     }

@@ -6,7 +6,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.8):
     - ExpoModulesCore
-  - Expo (52.0.43):
+  - Expo (52.0.44):
     - ExpoModulesCore
   - expo-dev-client (5.0.19):
     - EXManifests
@@ -1918,6 +1918,27 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNFlashList (1.8.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNGestureHandler (2.20.2):
     - DoubleConversion
     - glog
@@ -2169,6 +2190,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -2366,6 +2388,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNFlashList:
+    :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -2381,7 +2405,7 @@ SPEC CHECKSUMS:
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: a19d50504b8826546a4782770317bc83fffec87d
-  Expo: fa1475866d71a99d36fccaf9983a76b681e7da8d
+  Expo: 75e002fc29a18a72aa3db967b41b29c2b206875d
   expo-dev-client: e9b595bdf169c8f26c1e4c88af1e67172d1f872c
   expo-dev-launcher: 6c53b34ddbd6afa8c28f42338886831907688ce8
   expo-dev-menu: 9b01bb8fb3f1f9dee26ce82f74e2e35a7031ec19
@@ -2470,6 +2494,7 @@ SPEC CHECKSUMS:
   ReactCommon: 81e0744ee33adfd6d586141b927024f488bc49ea
   RNCAsyncStorage: ff8f69859448bde50f1c25d3e7eb37555fed33ab
   RNCPicker: cee1bca865d795657e931de5aad98b1650f3237b
+  RNFlashList: 4a5af211faa1c3bcbaac7d3debd147008ac1abca
   RNGestureHandler: 16ef3dc2d7ecb09f240f25df5255953c4098819b
   RNReanimated: a2692304a6568bc656c04c8ffea812887d37436e
   RNScreens: 351f431ef2a042a1887d4d90e1c1024b8ae9d123

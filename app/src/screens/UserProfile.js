@@ -6,6 +6,7 @@ import { auth, db } from '../../config/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 import * as Constants from '../utilities/constants';
 
+
 const UserProfile = ({ navigation }) => {
 
   const [fontsLoaded] = useFonts({
@@ -87,7 +88,7 @@ const UserProfile = ({ navigation }) => {
       {ShelterOwner && (
           <View style={styles.shelter_owner_line}>
             <Text>🏠 New shelter registration</Text>
-            <TouchableOpacity disabled={(RegistrationStatus != "Finish registration")} style={styles.registrationButton} onPress={() => navigation.navigate("RollInfoPages")}>
+            <TouchableOpacity disabled={(RegistrationStatus != "Finish registration")} style={styles.registrationButton} onPress={() => navigation.navigate("RollInfoPagesStack")}>
               {(RegistrationStatus == "Finish registration") && <Text style={[styles.registrationButtonText, styles.finishRegistrationColor]}>{RegistrationStatus}</Text>}
               {(RegistrationStatus == "Pending") && <Text style={[styles.registrationButtonText, styles.PendingRegistrationColor]}>{RegistrationStatus}</Text>}
               {(RegistrationStatus == "Approved") && <Text style={[styles.registrationButtonText, styles.ApprovedRegistrationColor]}>{RegistrationStatus}</Text>}
