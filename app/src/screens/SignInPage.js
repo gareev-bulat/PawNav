@@ -12,6 +12,7 @@ const SignInPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [] = useFonts({'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
   });
 
@@ -58,9 +59,14 @@ const SignInPage = ({ navigation }) => {
         placeholder="password"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        secureTextEntry={!passwordVisible}
         autoCapitalize="none"
       />
+      <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+        <Text style={styles.toggleText}>
+          {passwordVisible ? "Hide" : "Show"}
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={handleSignIn}>
         <LinearGradient colors={['#CA3232', '#641919']} style={styles.button}>
         <Text style={styles.buttonText}>Sign In</Text>
