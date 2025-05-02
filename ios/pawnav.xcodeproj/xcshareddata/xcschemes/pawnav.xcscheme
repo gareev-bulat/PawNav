@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "maps.app"
-               BlueprintName = "maps"
-               ReferencedContainer = "container:maps.xcodeproj">
+               BuildableName = "pawnav.app"
+               BlueprintName = "pawnav"
+               ReferencedContainer = "container:pawnav.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "mapsTests.xctest"
-               BlueprintName = "mapsTests"
-               ReferencedContainer = "container:maps.xcodeproj">
+               BuildableName = "pawnavTests.xctest"
+               BlueprintName = "pawnavTests"
+               ReferencedContainer = "container:pawnav.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "maps.app"
-            BlueprintName = "maps"
-            ReferencedContainer = "container:maps.xcodeproj">
+            BuildableName = "pawnav.app"
+            BlueprintName = "pawnav"
+            ReferencedContainer = "container:pawnav.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "maps.app"
-            BlueprintName = "maps"
-            ReferencedContainer = "container:maps.xcodeproj">
+            BuildableName = "pawnav.app"
+            BlueprintName = "pawnav"
+            ReferencedContainer = "container:pawnav.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

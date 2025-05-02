@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Button, TouchableOpacity, Alert } from "react-n
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
+import * as Constants from '../../utilities/constants';
 
 const QuizTemp = ({ navigation }) => {
 
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         width: 250,
         borderRadius: 30,
         marginBottom: 10,
-        borderColor: "green",
+        borderColor: Constants.DEFAULT_ORANGE,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         top: "80%",
         position: 'absolute',
-        backgroundColor: "green",
+        backgroundColor: Constants.DEFAULT_ORANGE,
         alignItems: "center",
         justifyContent: "center",
       },

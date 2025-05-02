@@ -28,7 +28,7 @@ const RollInfoPages = ({ navigation }) => {
       await setDoc(
         doc(db, "users", uid),
         {
-          registrationStatus: "Pending"
+          registrationStatus: "Finish registration"
 
         },
         { merge: true }

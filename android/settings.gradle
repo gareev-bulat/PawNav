@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'maps'
+rootProject.name = 'pawnav'
 
 dependencyResolutionManagement {
   versionCatalogs {
