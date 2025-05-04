@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFonts } from "expo-font";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -28,12 +28,12 @@ const RollInfoPages = ({ navigation }) => {
       await setDoc(
         doc(db, "users", uid),
         {
-          registrationStatus: "Finish registration"
+          registrationStatus: "Pending"
 
         },
         { merge: true }
       );
-      navigation.navigate("QuizTemp")
+      navigation.navigate("InputPage")
     } catch (error) {
       Alert.alert("Error. Please try again.");
     }

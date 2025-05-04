@@ -8,6 +8,7 @@ import QuizTemp from './RollInfoTemplates/QuizTemp'
 import LocationTemp from './RollInfoTemplates/LocationTemp'
 import UploadTemp from './RollInfoTemplates/UploadTemp'
 import EndPage from './RollInfoTemplates/EndPage'
+import InputPage from './RollInfoTemplates/InputPage'
 
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
@@ -27,6 +28,7 @@ const RollInfoPagesStack = () => {
     >
       <Stack.Screen name="RollInfoPages" component={RollInfoPages} />
       <Stack.Screen name="QuizTemp" component={QuizTemp} />
+      <Stack.Screen name="InputPage" component={InputPage} />
       <Stack.Screen name="UploadTemp" component={UploadTemp} />
       <Stack.Screen name="LocationTemp" component={LocationTemp} />
       <Stack.Screen name="EndPage" component={EndPage} />

@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 
+
 const LocationTemp = ({ navigation }) => {
 
     const [] = useFonts({
@@ -17,10 +18,13 @@ const LocationTemp = ({ navigation }) => {
           <Text style={styles.main_text}>Thank you for taking your time!</Text>
           <Text style={styles.sub_text}>
             The app registration application is being processed, track the
-            status of the shelter in your profile
+            status of the 
           </Text>
           <Text style={styles.sub_text}>
-            Feel free to reach out to us for any questions here: admin@gmail.com
+          shelter in your profile.
+          </Text>
+          <Text style={[styles.sub_text, styles.email]}>
+          Feel free to reach out to us for any questions here: admin@gmail.com
           </Text>
         </View>
         <TouchableOpacity
@@ -49,7 +53,12 @@ const styles = StyleSheet.create({
 
     },
 
+    email: {
+      marginTop: 50,
+    },
+
     main_text: {
+        textAlign: 'center',
         fontSize: 24,
         marginTop: 50,
         marginBottom: 100,
@@ -60,6 +69,7 @@ const styles = StyleSheet.create({
     sub_text: {
 
         fontSize: 16,
+        textAlign: 'center',
 
     },
 
