@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Platform } from "react-native";
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Platform, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -17,7 +17,7 @@ const QuizTemp = ({ navigation }) => {
     });
 
   const [shelterName, setShelterName] = useState("");
-  const [animalCapacity, setAnimalCapacity] = useState("");
+  const [animalCapacity, setAnimalCapacity] = useState(null);
   const [startHours, setStartHours] = useState(new Date());
   const [endHours, setEndHours] = useState(new Date());
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -31,32 +31,38 @@ const QuizTemp = ({ navigation }) => {
     setEndHours(selectedTime);
   };
 
-  const UpdateDate = async() => {
-
-    try {
+  const UpdateDate = async () => {
+    if (
+      shelterName != "" &&
+      animalCapacity != null &&
+      startHours != new Date() &&
+      endHours != new Date() &&
+      phoneNumber != ""
+    ) {
+      try {
         const user = auth.currentUser;
         if (!user) throw new Error("Not signed in");
 
-        const colRef = collection(db, 'users', user.uid, 'shelter')
-        const startTime = format(startHours, 'hh:mm a');
-        const endTime = format(endHours, 'hh:mm a');
+        const colRef = collection(db, "users", user.uid, "Shelter Information");
+        const startTime = format(startHours, "hh:mm a");
+        const endTime = format(endHours, "hh:mm a");
         await addDoc(colRef, {
-
-            animalCapacity: Number(animalCapacity) || null,
-            startHours: startTime,
-            endHours: endTime,
-            phoneNumber,
+          animalCapacity: Number(animalCapacity) || null,
+          startHours: startTime,
+          endHours: endTime,
+          phoneNumber,
         });
 
-        console.log("Shelter data has been recorded")
-        navigation.navigate("QuizTemp")
-
-    } catch (error) {
-          Alert.alert("Error. Please try again.");
-        }
-    
-
-  }
+        console.log("Shelter data has been recorded");
+        navigation.navigate("QuizTemp");
+      } catch (error) {
+        Alert.alert("Error. Please try again.");
+      }
+    }
+    else {
+      Alert.alert("Please fill out all the information")
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
