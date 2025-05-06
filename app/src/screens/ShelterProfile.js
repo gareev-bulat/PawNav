@@ -11,6 +11,10 @@ const ShelterProfile = ( { navigation } ) => {
   const handleVolunteering = () => alert("Volunteer!");
   const handleDonation = () => alert("Donate!");
 
+    const [isFavorite, setIsFavorite] = React.useState(false);
+    const toggleFavorite = () => {
+      setIsFavorite(prev => !prev);
+    };
 
     const [] = useFonts({
         'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
@@ -28,6 +32,14 @@ const ShelterProfile = ( { navigation } ) => {
           style={styles.shelter_image}
           source={require("../../assets/images/animal_shelter_image_profile.webp")}
         />
+        <TouchableOpacity style={styles.favoriteButton} onPress={toggleFavorite}>
+          <Ionicons
+            name={isFavorite ? "heart" : "heart-outline"}
+            size={30}
+            color={isFavorite ? "#ff7f09" : "black"}
+          />
+        </TouchableOpacity>
+
         <View style={styles.wrapper}>
           <Text style={styles.title}>Information:</Text>
           <Text style={styles.text}>{ShelterInformation}</Text>
@@ -155,6 +167,11 @@ const styles = StyleSheet.create({
   alternate_font: {
     color: '#ff7f09',
 
+  },
+  
+  favoriteButton: {
+    alignSelf: "flex-end",
+    margin: 15,
   }
 });
 
