@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, FlatList, Image, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { db } from '../../config/firebase';
+import { getDocs, collection, doc, collectionGroup } from 'firebase/firestore';
 
-const shelters = [
+/*const shelters = [
   {
     id: 1,
     name: "Shelter One",
@@ -38,9 +40,42 @@ const shelters = [
     phone: "(567) 890-1234",
     capacity: 60,
   },
-];
+];*/
 
-const ShelterComponent = ({ shelter,  navigation}) => (
+
+
+
+
+//fetch of all shelters in the app
+
+async function fetchAllShelters() {
+  const shelters = [];
+  const snap = await getDocs(collectionGroup(db, "Shelter Information"));
+  console.log(snap)
+  for (const docSnap of snap.docs) {
+    console.log("docsSnap:", docSnap)
+    const data = docSnap.data();
+
+    shelters.push({
+      id:   docSnap.id,
+      name: data.shelterName,
+      address: "Address", 
+      phone:  data.phoneNumber,
+      capacity: data.animalCapacity,         
+      startHours: data.startHours,
+      endHours: data.endHours,
+      
+    });
+  }
+
+  return shelters;
+}
+
+////////////////////
+
+
+
+const ShelterComponent = ({ shelter,  navigation }) => (
   <TouchableOpacity onPress={() => navigation.navigate('ShelterProfile')}>
   <View style={styles.card}>
     <Image
@@ -56,13 +91,7 @@ const ShelterComponent = ({ shelter,  navigation}) => (
 
       <View style={styles.metaRow}>
         <View style={styles.metaPill}>
-          <Text style={styles.metaPillText}>🕚 11 am - 1 pm</Text>
-        </View>
-        <View style={styles.metaPill}>
-          <Text style={styles.metaPillText}>👤 32</Text>
-        </View>
-        <View style={styles.metaPill}>
-          <Text style={styles.metaPillText}>🐾 32</Text>
+          <Text style={styles.metaPillText}>🕚 {shelter.startHours} - {shelter.endHours}</Text>
         </View>
       </View>
     </View>
@@ -73,6 +102,24 @@ const ShelterComponent = ({ shelter,  navigation}) => (
 
 const SheltersMenu = ( { navigation } ) => {
   const [search, setSearch] = useState("");
+
+  const [shelters, setShelters] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {     //fetch of all shelters 
+    fetchAllShelters()
+      .then((list) => setShelters(list))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  
+
+  if (loading) {      //shelters loading
+    return <Text>Loading shelters…</Text>;
+  }
+
+  console.log(shelters);
 
   const renderItem = ({ item }) => <ShelterComponent shelter={item} navigation={navigation}/>;
 
@@ -86,7 +133,7 @@ const SheltersMenu = ( { navigation } ) => {
       />
       <FlatList
         data={shelters}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 16 }}
       />

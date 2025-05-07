@@ -47,6 +47,7 @@ const QuizTemp = ({ navigation }) => {
         const startTime = format(startHours, "hh:mm a");
         const endTime = format(endHours, "hh:mm a");
         await addDoc(colRef, {
+          shelterName: shelterName,
           animalCapacity: Number(animalCapacity) || null,
           startHours: startTime,
           endHours: endTime,
