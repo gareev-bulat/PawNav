@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     buttonRow: {
       flexDirection: 'column',
       marginTop: 15,
+    
   },
 
   button: {
@@ -171,7 +172,9 @@ const styles = StyleSheet.create({
   
   favoriteButton: {
     alignSelf: "flex-end",
-    margin: 15,
+    top: -341,
+    padding: 30
+
   }
 });
 
