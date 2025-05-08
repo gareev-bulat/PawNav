@@ -3,7 +3,8 @@ import { StyleSheet, SafeAreaView, View, Text, Image, TouchableOpacity} from "re
 import { useFonts } from 'expo-font'
 import  Ionicons  from "@expo/vector-icons/Ionicons";
 import * as Constants from '../utilities/constants';
-
+import { auth, db } from '../../config/firebase';
+import { doc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
 
 const ShelterProfile = ( { navigation } ) => {
 
@@ -11,42 +12,78 @@ const ShelterProfile = ( { navigation } ) => {
   const handleVolunteering = () => alert("Volunteer!");
   const handleDonation = () => alert("Donate!");
 
-    const [isFavorite, setIsFavorite] = React.useState(false);
-    const toggleFavorite = () => {
-      setIsFavorite(prev => !prev);
-    };
+  const [isFavorite, setIsFavorite] = React.useState(false);
 
-    const [] = useFonts({
-        'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
-      });
+  React.useEffect(() => {
+    if (!uid) return;
 
-    let ShelterName = "NAME"
-    let ShelterInformation = "Information"
-    let ShelterLocation = "Locations"
-    return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.name}>{ShelterName}</Text>
-        </View>
-        <Image
-          style={styles.shelter_image}
-          source={require("../../assets/images/animal_shelter_image_profile.webp")}
+    const userDocRef = doc(db, 'users', uid);
+
+    const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const favourites = docSnap.data().favourites || [];
+        setIsFavorite(favourites.includes(ShelterName));
+      }
+    });
+
+    return unsubscribe;
+  }, [uid]);
+  const uid = auth.currentUser ? auth.currentUser.uid : null;
+
+  const ShelterName = "NAME";
+
+  const toggleFavorite = async () => {
+    setIsFavorite(prev => !prev);
+
+    if (!uid) return;
+
+    const userDocRef = doc(db, 'users', uid);
+
+    try {
+      if (!isFavorite) {
+        await updateDoc(userDocRef, {
+          favourites: arrayUnion(ShelterName)
+        });
+      } else {
+        await updateDoc(userDocRef, {
+          favourites: arrayRemove(ShelterName)
+        });
+      }
+    } catch (error) {
+      console.error("Error updating favorites: ", error);
+    }
+  };
+
+  const [] = useFonts({
+    'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
+  });
+
+  let ShelterInformation = "Information";
+  let ShelterLocation = "Locations";
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.name}>{ShelterName}</Text>
+      </View>
+      <Image
+        style={styles.shelter_image}
+        source={require("../../assets/images/animal_shelter_image_profile.webp")}
+      />
+      <TouchableOpacity style={styles.favoriteButton} onPress={toggleFavorite}>
+        <Ionicons
+          name={isFavorite ? "heart" : "heart-outline"}
+          size={30}
+          color={isFavorite ? "#ff7f09" : "black"}
         />
-        <TouchableOpacity style={styles.favoriteButton} onPress={toggleFavorite}>
-          <Ionicons
-            name={isFavorite ? "heart" : "heart-outline"}
-            size={30}
-            color={isFavorite ? "#ff7f09" : "black"}
-          />
-        </TouchableOpacity>
+      </TouchableOpacity>
 
-        <View style={styles.wrapper}>
-          <Text style={styles.title}>Information:</Text>
-          <Text style={styles.text}>{ShelterInformation}</Text>
-          <Text style={styles.title}>Locations:</Text>
-          <Text style={styles.text}>{ShelterLocation}</Text>
-          <View style={styles.buttonRow}>
-
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>Information:</Text>
+        <Text style={styles.text}>{ShelterInformation}</Text>
+        <Text style={styles.title}>Locations:</Text>
+        <Text style={styles.text}>{ShelterLocation}</Text>
+        <View style={styles.buttonRow}>
           <TouchableOpacity style={[styles.button, styles.button1]} onPress={handleAdoption}>
             <Text style={styles.buttonText}>Adopt a pet</Text>
           </TouchableOpacity>
@@ -55,21 +92,19 @@ const ShelterProfile = ( { navigation } ) => {
             <Text style={[styles.buttonText, styles.alternate_font]}>Apply for volunteering</Text>
           </TouchableOpacity>
 
-          
-            <TouchableOpacity style={[styles.button, styles.button3]} onPress={handleDonation}>
-              <Text style={styles.buttonText}>Make a donation</Text>
-            </TouchableOpacity>
-          
-        </View>
-        </View>
-        
-        <View style={styles.backButton}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="exit-outline" size={35} color="black" />
+          <TouchableOpacity style={[styles.button, styles.button3]} onPress={handleDonation}>
+            <Text style={styles.buttonText}>Make a donation</Text>
           </TouchableOpacity>
         </View>
       </View>
-    );
+
+      <View style={styles.backButton}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="exit-outline" size={35} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 };
 
 
