@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { StyleSheet, SafeAreaView, View, Text, Image, TouchableOpacity} from "react-native";
 import { useFonts } from 'expo-font'
 import  Ionicons  from "@expo/vector-icons/Ionicons";
@@ -12,9 +12,9 @@ const ShelterProfile = ( { navigation } ) => {
   const handleVolunteering = () => alert("Volunteer!");
   const handleDonation = () => alert("Donate!");
 
-  const [isFavorite, setIsFavorite] = React.useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!uid) return;
 
     const userDocRef = doc(db, 'users', uid);
@@ -214,3 +214,6 @@ const styles = StyleSheet.create({
 });
 
 export default ShelterProfile;
+
+
+

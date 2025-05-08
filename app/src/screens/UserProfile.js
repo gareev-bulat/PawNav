@@ -88,8 +88,10 @@ const UserProfile = ({ navigation }) => {
         {ShelterOwner && (
           <View style={styles.shelter_owner_line}>
             <Text>🏠 New shelter registration</Text>
-            <TouchableOpacity disabled={RegistrationStatus !== "Finish registration"} style={styles.registrationButton} onPress={() => navigation.navigate("RollInfoPagesStack")}>              
-              <Text style={styles.registrationButtonText}>{RegistrationStatus}</Text>
+            <TouchableOpacity disabled={(RegistrationStatus != "Finish registration")} style={styles.registrationButton} onPress={() => navigation.navigate("RollInfoPagesStack")}>
+              {(RegistrationStatus == "Finish registration") && <Text style={[styles.registrationButtonText, styles.finishRegistrationColor]}>{RegistrationStatus}</Text>}
+              {(RegistrationStatus == "Pending") && <Text style={[styles.registrationButtonText, styles.PendingRegistrationColor]}>{RegistrationStatus}</Text>}
+              {(RegistrationStatus == "Approved") && <Text style={[styles.registrationButtonText, styles.ApprovedRegistrationColor]}>{RegistrationStatus}</Text>}
             </TouchableOpacity>
           </View>
         )}
