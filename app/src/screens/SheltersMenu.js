@@ -4,56 +4,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { db } from '../../config/firebase';
 import { getDocs, collection, doc, collectionGroup } from 'firebase/firestore';
 
-/*const shelters = [
-  {
-    id: 1,
-    name: "Shelter One",
-    address: "123 Main St, Cityville",
-    phone: "(123) 456-7890",
-    capacity: 50,
-  },
-  {
-    id: 2,
-    name: "Shelter Two",
-    address: "456 Elm St, Townsville",
-    phone: "(234) 567-8901",
-    capacity: 30,
-  },
-  {
-    id: 3,
-    name: "Shelter Three",
-    address: "789 Oak St, Villagetown",
-    phone: "(345) 678-9012",
-    capacity: 40,
-  },
-  {
-    id: 4,
-    name: "Shelter Four",
-    address: "101 Pine St, Hamletburg",
-    phone: "(456) 789-0123",
-    capacity: 25,
-  },
-  {
-    id: 5,
-    name: "Shelter Five",
-    address: "202 Maple St, Boroughcity",
-    phone: "(567) 890-1234",
-    capacity: 60,
-  },
-];*/
-
-
-
-
 
 //fetch of all shelters in the app
 
 async function fetchAllShelters() {
   const shelters = [];
   const snap = await getDocs(collectionGroup(db, "Shelter Information"));
-  console.log(snap)
+  //console.log(snap)
   for (const docSnap of snap.docs) {
-    console.log("docsSnap:", docSnap)
+    //console.log("docsSnap:", docSnap)
     const data = docSnap.data();
 
     shelters.push({
@@ -76,7 +35,8 @@ async function fetchAllShelters() {
 
 
 const ShelterComponent = ({ shelter,  navigation }) => (
-  <TouchableOpacity onPress={() => navigation.navigate('ShelterProfile')}>
+  //passing shelter props inside navigation props to the Shelter Profile component
+  <TouchableOpacity onPress={() => navigation.navigate('ShelterProfile', { shelter })}> 
   <View style={styles.card}>
     <Image
         style={styles.shelter_image}
@@ -119,7 +79,7 @@ const SheltersMenu = ( { navigation } ) => {
     return <Text>Loading shelters…</Text>;
   }
 
-  console.log(shelters);
+  //console.log(shelters);
 
   const renderItem = ({ item }) => <ShelterComponent shelter={item} navigation={navigation}/>;
 
