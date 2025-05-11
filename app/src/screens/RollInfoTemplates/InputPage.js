@@ -10,7 +10,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { format } from "date-fns";
 
 
-const QuizTemp = ({ navigation }) => {
+const InputPage = ({ navigation }) => {
 
   const [] = useFonts({
       CustomFont: require("../../../assets/fonts/Roboto_Condensed-Bold.ttf"),
@@ -46,7 +46,7 @@ const QuizTemp = ({ navigation }) => {
         const colRef = collection(db, "users", user.uid, "Shelter Information");
         const startTime = format(startHours, "hh:mm a");
         const endTime = format(endHours, "hh:mm a");
-        await addDoc(colRef, {
+        const docRef = await addDoc(colRef, {
           shelterName: shelterName,
           animalCapacity: Number(animalCapacity) || null,
           startHours: startTime,
@@ -55,7 +55,8 @@ const QuizTemp = ({ navigation }) => {
         });
 
         console.log("Shelter data has been recorded");
-        navigation.navigate("QuizTemp");
+        console.log("id: ", docRef.id);
+        navigation.navigate("QuizTemp", { shelterDocId: docRef.id });
       } catch (error) {
         Alert.alert("Error. Please try again.");
       }
@@ -188,5 +189,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizTemp;
+export default InputPage;
 

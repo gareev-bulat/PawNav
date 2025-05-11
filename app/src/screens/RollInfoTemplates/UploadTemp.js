@@ -20,9 +20,13 @@ import {
 import * as Constants from "../../utilities/constants";
 
 
-export default function UploadTemp({ navigation }) {
+export default function UploadTemp( { navigation, route } ) {
+
+
   const [fileName, setFileName] = useState("");
   const [picked, setPicked] = useState(false);
+
+  const { shelterDocId } = route.params;
 
   async function pickDocument() {
   try {
@@ -85,7 +89,7 @@ export default function UploadTemp({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("LocationTemp")}
+        onPress={() => navigation.navigate("LocationTemp", { shelterDocId })}
       >
         <AntDesign size={45} name="arrowright" color="white" />
       </TouchableOpacity>

@@ -30,7 +30,6 @@ const Menu = () => {
     getLocation();
   };
 
-  
     useEffect(() => {
 
       getPermission();

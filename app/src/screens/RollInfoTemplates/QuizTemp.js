@@ -5,11 +5,14 @@ import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import * as Constants from '../../utilities/constants';
 
-const QuizTemp = ({ navigation }) => {
+
+const QuizTemp = ({ navigation, route }) => {
 
   const [] = useFonts({
       CustomFont: require("../../../assets/fonts/Roboto_Condensed-Bold.ttf"),
     });
+
+  const { shelterDocId } = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,7 +35,7 @@ const QuizTemp = ({ navigation }) => {
       </View>
       <TouchableOpacity
         style={styles.buttonSubmit}
-        onPress={() => navigation.navigate("UploadTemp")}
+        onPress={() => navigation.navigate("UploadTemp", { shelterDocId })}
       >
         <AntDesign size="45" name="arrowright" color="white" />
       </TouchableOpacity>
