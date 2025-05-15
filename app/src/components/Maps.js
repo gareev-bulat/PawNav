@@ -1,10 +1,12 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, TouchableHighlight} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from "react-native-maps";
 import { MapPrompts } from './MapPrompts';
-import DataBase from '../utilities/data';
 import * as Constants from '../utilities/constants';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { collectionGroup, getDocs } from 'firebase/firestore';
+import { db } from '../../config/firebase';
+
 
 
 const styles = StyleSheet.create({
@@ -65,8 +67,16 @@ const styles = StyleSheet.create({
 });
 
 //Markers Render
-const Markers = DataBase.map(({location, name, id, workHours, link}) => {
-  return (
+const Markers = ({ shelters }) => {
+  console.log(shelters);
+  return shelters.map(({ shelterLongitude, shelterLatitude, name, id, startHours, endHours }) => {
+    const location = {
+      latitude: shelterLatitude,
+      longitude: shelterLongitude,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+    };
+    return (
     <Marker key={id} coordinate={location}>
       <Image
             source={require('../../assets/images/Marker_icon.png')}
@@ -77,19 +87,19 @@ const Markers = DataBase.map(({location, name, id, workHours, link}) => {
         <View style={styles.infoWindow}>
           <Text style={styles.headerText}>{name}</Text>
           <Text style={styles.subTitle}>Hours:</Text>
-          <Text style={styles.bodyText}>{workHours}</Text>
-          <Text style={styles.subTitle}>Website:</Text>
-          <Text style={styles.bodyText}>{link}</Text>
+          <Text style={styles.bodyText}>{startHours} - {endHours}</Text>
         </View>
       </Callout>
     </Marker>
-  )
+    );
 });
-////////////////////
+};
+///////////////////
 
 const Maps = () => {
   const { prompts } = useContext(MapPrompts);
   const mapReference = useRef(null);
+  const [shelters, setShelters] = useState([]);
   
   console.log("user-location", prompts.UserRegion)
   console.log("destination", prompts.DestinationRegion)
@@ -113,6 +123,36 @@ const Maps = () => {
     }
   };
 
+  const fetchMarkers = async() => {
+
+    const shelters = [];
+  
+    const snap = await getDocs(collectionGroup(db, "Shelter Information"));
+    for (const doc of snap.docs) {
+      const data = doc.data();
+      shelters.push({
+        id: doc.id,
+        name: data.shelterName,
+        startHours: data.startHours,
+        endHours: data.endHours,
+        shelterLongitude: data.shelterLongitude,
+        shelterLatitude: data.shelterLatitude,
+      })
+    }
+    return shelters;
+  };
+
+  useEffect(() => {         /////fetch all locations from firebase
+    console.log("Starting fetch process...")
+    fetchMarkers()
+    .then(list => {
+      console.log(list);
+      setShelters(list);
+    })
+    .catch(err => console.error(err))
+
+  }, []);
+
   useEffect(() => {
     if (prompts.DestinationRegion.latitude) {
       animateToDestination(prompts.DestinationRegion);
@@ -129,24 +169,11 @@ const Maps = () => {
     <View style={styles.container}>
       <MapView
         ref={mapReference}
-        provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={mapRegion}
-        customMapStyle={[
-          {
-            featureType: 'poi',
-            elementType: 'labels',
-            stylers: [{ visibility: 'off' }],
-          },
-          {
-            featureType: 'transit',
-            elementType: 'labels',
-            stylers: [{ visibility: 'off' }],
-          },
-        ]}
         showsUserLocation={true}
       >
-        {Markers}
+        <Markers shelters={shelters} />
       </MapView>
     </View>
   );

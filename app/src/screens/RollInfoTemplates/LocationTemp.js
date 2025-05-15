@@ -71,22 +71,9 @@ const LocationTemp = ( { navigation, route } ) => {
       <Text style={styles.question}>Upload Shelter Location</Text>
       <Text style={styles.sub_text}>Drag the pin 📍 to your shelter’s location, then tap the button to confirm.</Text>
       <MapView
-        provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={initial_region}
         onRegionChangeComplete={setRegion}
-        customMapStyle={[
-          {
-            featureType: "poi",
-            elementType: "labels",
-            stylers: [{ visibility: "off" }],
-          },
-          {
-            featureType: "transit",
-            elementType: "labels",
-            stylers: [{ visibility: "off" }],
-          },
-        ]}
       />
 
       <View pointerEvents="none" style={styles.pinContainer}>

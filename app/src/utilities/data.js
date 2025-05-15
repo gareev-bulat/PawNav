@@ -6,10 +6,10 @@ const DataBase = [
       longitude: -75.1999,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05},
+    startHours: "12:00 PM",
+    endHours: "23:00 PM",
     workHours: "12am-6pm",
-    link: "link1",
     id: 1,
-    distance: 2.0,
   },
   {
     name: "Shelter2",
@@ -19,9 +19,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05},
     workHours: "12am-6pm",
-    link: "link2",
     id: 2,
-    distance: 2.0,
   },
   {
     name: "Shelter3",
@@ -31,9 +29,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05},
     workHours: "12am-6pm",
-    link: "link3",
     id: 3,
-    distance: 2.0,
   },
   {
     name: "Shelter4",
@@ -43,9 +39,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05},
     workHours: "12am-6pm",
-    link: "link4",
     id: 4,
-    distance: 2.0,
   },
   {
     name: "Shelter5",
@@ -55,9 +49,7 @@ const DataBase = [
       latitudeDelta: 0.05,
       longitudeDelta: 0.05},
     workHours: "12am-6pm",
-    link: "link5",
     id: 5,
-    distance: 2.0
   },
 ];
 
