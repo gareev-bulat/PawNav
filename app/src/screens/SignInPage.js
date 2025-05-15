@@ -22,10 +22,8 @@ const SignInPage = ({ navigation }) => {
       alert(error);
       return;
     } 
-    //firebase part (sign in)
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-     
       setError('');
       const user = userCredential.user;
       alert(`Welcome, ${user.email}!`);
@@ -35,7 +33,6 @@ const SignInPage = ({ navigation }) => {
       setError('Incorrect username or password. Try again!');
       alert(error);
     });
-    
   };
 
   return (
@@ -54,22 +51,24 @@ const SignInPage = ({ navigation }) => {
         autoCapitalize="none"
       />
       <Text style={styles.title}>Password:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={!passwordVisible}
-        autoCapitalize="none"
-      />
-      <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-        <Text style={styles.toggleText}>
-          {passwordVisible ? "Hide" : "Show"}
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!passwordVisible}
+          autoCapitalize="none"
+        />
+        <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+          <Text style={styles.toggleText}>
+            {passwordVisible ? "Hide" : "Show"}
+          </Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity onPress={handleSignIn}>
         <LinearGradient colors={['#CA3232', '#641919']} style={styles.button}>
-        <Text style={styles.buttonText}>Sign In</Text>
+          <Text style={styles.buttonText}>Sign In</Text>
         </LinearGradient>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('SignUpPage')}>
@@ -88,13 +87,11 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
     backgroundColor: '#f5f5f5',
   },
-
   appname: {
     fontSize: 30,
     fontWeight: 'bold',
     paddingBottom: 50,
   },
-
   title: {
     fontSize: 15,
     fontWeight: 'bold',
@@ -141,9 +138,28 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'contain'
-    
-
-  }
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    borderColor: Constants.DARK_RED,
+    borderWidth: 1,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    fontFamily: 'CustomFont',
+  },
+  toggleText: {
+    color: '#CA3232',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontFamily: 'CustomFont',
+  },
 });
 
 export default SignInPage;
