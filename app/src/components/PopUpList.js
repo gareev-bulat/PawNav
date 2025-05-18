@@ -1,23 +1,60 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import DataBase from '../utilities/data';
 import * as Constants from '../utilities/constants';
 import { MapPrompts } from '../components/MapPrompts';
 import { getPreciseDistance } from 'geolib';
+import { db } from '../../config/firebase';
+import { getDocs, collection, doc, collectionGroup } from 'firebase/firestore';
 
 
 const PopUpList = ({ isVisible, onItemPress }) => {
 
   const { setPrompts } = useContext(MapPrompts);
   const { prompts } = useContext(MapPrompts);
+  const [shelters, setShelters] = useState([]);
+
+
+  const fetchMarkers = async() => {
+
+    const shelters = [];
+  
+    const snap = await getDocs(collectionGroup(db, "Shelter Information"));
+    for (const doc of snap.docs) {
+      const data = doc.data();
+      shelters.push({
+        id: doc.id,
+        name: data.shelterName,
+        startHours: data.startHours,
+        endHours: data.endHours,
+        location: {
+          latitude:  data.shelterLatitude,
+          longitude: data.shelterLongitude,
+        },
+      })
+    }
+    return shelters;
+  };
+
+  useEffect(() => {         /////fetch all shelters from firebase
+      console.log("Starting fetch process...")
+      fetchMarkers()
+      .then(list => {
+        console.log(list);
+        setShelters(list);
+      })
+      .catch(err => console.error(err))
+  
+    }, []);
 
   
   if (!isVisible) return null;
 
+  console.log(shelters);
+
   return (
     <View style={styles.popUpList}>
       <FlatList
-        data={DataBase}
+        data={shelters}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -33,7 +70,6 @@ const PopUpList = ({ isVisible, onItemPress }) => {
           >
           
             <Text style={styles.shelterName}>{item.name}</Text>
-            <Text style={styles.shelterDistance}>{getPreciseDistance(prompts.UserRegion, item.location).toFixed(1)} mi</Text>
           </TouchableOpacity>
         )}
       />

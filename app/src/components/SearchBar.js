@@ -22,30 +22,14 @@ function dataFetch(address) {
     });
 }
 
-export function CoordinatesSetter(location) {
-  return location;
-}
+
 
 const SearchComponent = () => {
   const [text, setText] = useState('');
   const [popupVisible, setPopupVisible] = useState(false);
 
-  useEffect(() => {
-    if (text !== '') {
-      dataFetch(text)
-        .then((location) => {
-          if (location !== undefined) {
-            console.log('Search result: ', CoordinatesSetter(location));
-            CoordinatesSetter(location);
-          } else {
-            console.log('no results');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [text]);
+
+  console.log(text);
 
   return (
     <View style={{ flex: 1 }}>
