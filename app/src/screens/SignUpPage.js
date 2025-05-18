@@ -165,7 +165,7 @@ const SignUpPage = ({ navigation }) => {
         </LinearGradient>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("SignInPage")}>
-        <Text style={styles.link}>Comeback to Sign In</Text>
+        <Text style={styles.link}>Back to Sign In</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { auth, db } from '../../config/firebase';
@@ -29,7 +29,7 @@ const UserProfile = ({ navigation }) => {
       (docSnap) => {
         if (docSnap.exists()) {
           setUserData(docSnap.data());
-          console.log('Fetched user data: ', docSnap.data()); // Debugging line
+          console.log('Fetched user data: ', docSnap.data()); 
         } else {
           console.log("No documents");
         }
@@ -60,7 +60,19 @@ const UserProfile = ({ navigation }) => {
   let RegistrationStatus = userData?.registrationStatus;
   let Favourites = userData?.favourites || [];
 
-  console.log('Favourites: ', Favourites); // Debugging line
+  console.log('Favourites data: ', Favourites); 
+
+  const numColumns = 3;
+
+  const renderFavoriteShelter = ({ item }) => (
+    <View style={styles.favShelterContainer}>
+      <Image
+        source={require('../../assets/images/animal_shelter_image_profile.webp')}
+        style={styles.favShelterImage}
+      />
+      <Text style={styles.favShelterName}>{item}</Text>
+    </View>
+  )
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,9 +114,14 @@ const UserProfile = ({ navigation }) => {
 
         <Text style={styles.title}>Favourite Shelters:</Text>
         {Favourites && Favourites.length > 0 ? (
-          Favourites.map((shelter, index) => (
-            <Text key={index} style={styles.text}>{shelter}</Text>
-          ))
+          <FlatList
+            data={Favourites}
+            renderItem={renderFavoriteShelter}
+            keyExtractor={(item, index) => item.name + index}
+            numColumns={numColumns}
+            columnWrapperStyle={styles.row}
+            scrollEnabled={false}
+          />
         ) : (
           <Text style={styles.text}>No favourite shelters yet.</Text>
         )}
@@ -198,7 +215,35 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: 'flex-start',
     resizeMode: 'cover'
-  }
+  },
+  favShelterContainer: {
+    flex: 1,
+    margin: 10,
+    alignItems: 'center',
+    maxWidth: Dimensions.get('window').width / 3 - 20, 
+  },
+  
+  favShelterImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,  
+    marginBottom: 5,
+    resizeMode: 'cover',
+    borderWidth: 1,
+    borderColor: '#ff7f09',
+  },
+  
+  favShelterName: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'black',
+    textAlign: 'center',
+  },
+  
+  row: {
+    justifyContent: 'space-between',
+  },
+  
 });
 
 export default UserProfile;

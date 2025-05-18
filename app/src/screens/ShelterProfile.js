@@ -52,13 +52,20 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
     try {
       if (!isFavorite) {
         await updateDoc(userDocRef, {
-          favourites: arrayUnion(shelter.name)
+          favourites: arrayUnion({
+            name: shelter.name,
+            imageUrl: shelter.imageUrl
+          }),
         });
       } else {
         await updateDoc(userDocRef, {
-          favourites: arrayRemove(shelter.name)
+          favourites: arrayRemove({
+            name: shelter.name,
+            imageUrl: shelter.imageUrl 
+          }),
         });
       }
+      setIsFavorite(prev => !prev);
     } catch (error) {
       console.error("Error updating favorites: ", error);
     }
