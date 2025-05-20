@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
 import { useFonts } from 'expo-font';
 import Tabs from '../components/Tabs';
-import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+  ScrollView
+} from 'react-native';
 import * as Constants from '../utilities/constants';
 import { LinearGradient } from 'expo-linear-gradient';
-import { auth } from '../../config/firebase'
+import { auth } from '../../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const SignInPage = ({ navigation }) => {
-  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [] = useFonts({'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
+
+  const [] = useFonts({
+    'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
   });
 
   const handleSignIn = () => {
@@ -21,66 +34,78 @@ const SignInPage = ({ navigation }) => {
       setError('Error: Username and password are required.');
       alert(error);
       return;
-    } 
+    }
     signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      setError('');
-      const user = userCredential.user;
-      alert(`Welcome, ${user.email}!`);
-      navigation.navigate('Tabs'); 
-    })
-    .catch((err) => {
-      setError('Incorrect username or password. Try again!');
-      alert(error);
-    });
+      .then((userCredential) => {
+        setError('');
+        const user = userCredential.user;
+        alert(`Welcome, ${user.email}!`);
+        navigation.navigate('Tabs');
+      })
+      .catch((err) => {
+        setError('Incorrect username or password. Try again!');
+        alert(error);
+      });
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.shelter_image}
-        source={require("../../assets/images/Menu_icon.png")}
-      />
-      <Text style={styles.appname}>PawNav</Text>
-      <Text style={styles.title}>Email:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-      />
-      <Text style={styles.title}>Password:</Text>
-      <View style={styles.passwordContainer}>
-        <TextInput
-          style={styles.passwordInput}
-          placeholder="password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!passwordVisible}
-          autoCapitalize="none"
-        />
-        <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-          <Text style={styles.toggleText}>
-            {passwordVisible ? "Hide" : "Show"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity onPress={handleSignIn}>
-        <LinearGradient colors={['#CA3232', '#641919']} style={styles.button}>
-          <Text style={styles.buttonText}>Sign In</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('SignUpPage')}>
-        <Text style={styles.link}>Need an account? Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Image
+            style={styles.shelter_image}
+            source={require("../../assets/images/Menu_icon.png")}
+          />
+          <Text style={styles.appname}>PawNav</Text>
+
+          <Text style={styles.title}>Email:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+          />
+
+          <Text style={styles.title}>Password:</Text>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!passwordVisible}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+              <Text style={styles.toggleText}>
+                {passwordVisible ? "Hide" : "Show"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity onPress={handleSignIn}>
+            <LinearGradient colors={['#CA3232', '#641919']} style={styles.button}>
+              <Text style={styles.buttonText}>Sign In</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate('SignUpPage')}>
+            <Text style={styles.link}>Need an account? Sign Up</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -102,10 +127,9 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 40,
-    borderColor: '#ccc',
+    borderColor: Constants.DARK_RED,
     borderWidth: 1,
     borderRadius: 15,
-    borderColor: Constants.DARK_RED,
     paddingHorizontal: 10,
     marginBottom: 25,
     fontFamily: 'CustomFont',
