@@ -1,11 +1,12 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity, TouchableHighlight} from 'react-native';
+import { View, StyleSheet, Text, Image, Button, TouchableOpacity, TouchableHighlight} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout, CalloutSubview } from "react-native-maps";
 import { MapPrompts } from './MapPrompts';
 import * as Constants from '../utilities/constants';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { collectionGroup, getDocs } from 'firebase/firestore';
 import { db } from '../../config/firebase';
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
 //Markers Render
 const Markers = ({ shelters }) => {
   console.log(shelters);
+  const navigation = useNavigation();
   return shelters.map(({ shelterLongitude, shelterLatitude, name, id, startHours, endHours }) => {
     const location = {
       latitude: shelterLatitude,
@@ -77,26 +79,33 @@ const Markers = ({ shelters }) => {
       longitudeDelta: 0.05,
     };
     return (
-    <Marker key={id} coordinate={location}>
-      <Image
-            source={require('../../assets/images/Marker_icon.png')}
-            style={styles.markerImage}
-            resizeMode="contain"
-          />
-      <Callout tooltip={true}>
-        <View style={styles.infoWindow}>
-          <Text style={styles.headerText}>{name}</Text>
-          <Text style={styles.subTitle}>Hours:</Text>
-          <Text style={styles.bodyText}>{startHours} - {endHours}</Text>
-        </View>
-      </Callout>
-    </Marker>
+      <Marker
+        key={id}
+        coordinate={location}
+        onCalloutPress={() => navigation.navigate("ShelterProfile", { shelter: { id, name, startHours, endHours, shelterLatitude, shelterLongitude }})}
+      >
+        <Image
+          source={require("../../assets/images/Marker_icon.png")}
+          style={styles.markerImage}
+          resizeMode="contain"
+        />
+        <Callout tooltip={true}>
+          <View style={styles.infoWindow}>
+            <Text style={styles.headerText}>{name}</Text>
+            <Text style={styles.subTitle}>Hours:</Text>
+            <Text style={styles.bodyText}>
+              {startHours} - {endHours}
+            </Text>
+            
+          </View>
+        </Callout>
+      </Marker>
     );
 });
 };
 ///////////////////
 
-const Maps = () => {
+const Maps = ( { navigation } ) => {
   const { prompts } = useContext(MapPrompts);
   const mapReference = useRef(null);
   const [shelters, setShelters] = useState([]);

@@ -17,7 +17,7 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
 
   const uid = auth.currentUser ? auth.currentUser.uid : null;
   console.log(uid);
-  console.log(shelter.name);
+  console.log("shelter: ", shelter)
 
 
   useEffect(() => {
