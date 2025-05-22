@@ -74,6 +74,7 @@ const UserProfile = ({ navigation }) => {
     </View>
   )
 
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

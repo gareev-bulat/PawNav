@@ -43,7 +43,9 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
 
 
   const toggleFavorite = async () => {
+
     setIsFavorite(prev => !prev);
+    
 
     if (!uid) return;
 
@@ -52,20 +54,19 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
     try {
       if (!isFavorite) {
         await updateDoc(userDocRef, {
-          favourites: arrayUnion({
-            name: shelter.name,
-            imageUrl: shelter.imageUrl
-          }),
+          favourites: arrayUnion(
+            shelter.name,
+            //imageUrl: shelter.imageUrl
+          ),
         });
       } else {
         await updateDoc(userDocRef, {
-          favourites: arrayRemove({
-            name: shelter.name,
-            imageUrl: shelter.imageUrl 
-          }),
+          favourites: arrayRemove(
+            shelter.name,
+            //imageUrl: shelter.imageUrl 
+          ),
         });
-      }
-      setIsFavorite(prev => !prev);
+      } 
     } catch (error) {
       console.error("Error updating favorites: ", error);
     }
