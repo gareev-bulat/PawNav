@@ -4,6 +4,7 @@ import SignInPage from './src/screens/SignInPage';
 import SignUpPage from './src/screens/SignUpPage';
 import SettingsPage from './src/screens/SettingsPage';
 import ShelterProfile from './src/screens/ShelterProfile';
+import Maps from './src/components/Maps';
 
 
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
@@ -26,6 +27,7 @@ const App = () => {
         <RootStack.Screen name="SignUpPage" component={SignUpPage} />
         <RootStack.Screen name="SignInPage" component={SignInPage} />
         <RootStack.Screen name="Tabs" component={Tabs} />
+        <RootStack.Screen name="Maps" component={Maps} />
 
 
         {/*Additional modal navigation*/}
