@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { auth, db } from '../../config/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 import * as Constants from '../utilities/constants';
@@ -54,15 +54,12 @@ const UserProfile = ({ navigation }) => {
 
   let ProfileName = userData?.name || "Name";
   let ProfileSurname = userData?.surname || "Surname";
-  let ProfileStatus = userData?.status || "Status example";
   let ProfileRole = userData?.role || "Role";
   let ShelterOwner = userData?.owner;
   let RegistrationStatus = userData?.registrationStatus;
   let Favourites = userData?.favourites || [];
 
   console.log('Favourites data: ', Favourites); 
-
-  const numColumns = 3;
 
   const renderFavoriteShelter = ({ item }) => (
     <View style={styles.favShelterContainer}>
@@ -78,48 +75,82 @@ const UserProfile = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Image
-          style={styles.profile_image}
-          source={require("../../assets/images/profile_image.jpeg")}
-        />
+        <View style={styles.sub_container}>
+          <Image
+            style={styles.profile_image}
+            source={require("../../assets/images/profile_image.jpeg")}
+          />
+          <View style={styles.editButton}>
+            <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+              <FontAwesome5
+                name="pen"
+                style={styles.editIcon}
+                size={20}
+                color={Constants.DARK_RED}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.right_content}>
         <Text style={styles.name}>
           {ProfileName} {ProfileSurname}
         </Text>
 
-        <View style={styles.settingsButton}>
-          <TouchableOpacity onPress={() => navigation.navigate("Settings")}>            
-            <Ionicons
-              name="settings-outline"
-              size={40}
-              color={Constants.DARK_RED}
-            />
-          </TouchableOpacity>
+        <Text style={styles.role}>{ProfileRole}</Text>
+      
         </View>
       </View>
 
       <ScrollView style={styles.body} indicatorStyle="white">
         {ShelterOwner && (
-          <View style={styles.shelter_owner_line}>
+          <View style={styles.shelter_owner_tab}>
             <Text>🏠 New shelter registration</Text>
-            <TouchableOpacity disabled={(RegistrationStatus != "Finish registration")} style={styles.registrationButton} onPress={() => navigation.navigate("RollInfoPagesStack")}>
-              {(RegistrationStatus == "Finish registration") && <Text style={[styles.registrationButtonText, styles.finishRegistrationColor]}>{RegistrationStatus}</Text>}
-              {(RegistrationStatus == "Pending") && <Text style={[styles.registrationButtonText, styles.PendingRegistrationColor]}>{RegistrationStatus}</Text>}
-              {(RegistrationStatus == "Approved") && <Text style={[styles.registrationButtonText, styles.ApprovedRegistrationColor]}>{RegistrationStatus}</Text>}
+            <TouchableOpacity
+              disabled={RegistrationStatus != "Finish registration"}
+              style={styles.registrationButton}
+              onPress={() => navigation.navigate("RollInfoPagesStack")}
+            >
+              {RegistrationStatus == "Finish registration" && (
+                <Text
+                  style={[
+                    styles.registrationButtonText,
+                    styles.finishRegistrationColor,
+                  ]}
+                >
+                  {RegistrationStatus}
+                </Text>
+              )}
+              {RegistrationStatus == "Pending" && (
+                <Text
+                  style={[
+                    styles.registrationButtonText,
+                    styles.PendingRegistrationColor,
+                  ]}
+                >
+                  {RegistrationStatus}
+                </Text>
+              )}
+              {RegistrationStatus == "Approved" && (
+                <Text
+                  style={[
+                    styles.registrationButtonText,
+                    styles.ApprovedRegistrationColor,
+                  ]}
+                >
+                  {RegistrationStatus}
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         )}
-        <Text style={styles.title}>Status:</Text>
-        <Text style={styles.text}>{ProfileStatus}</Text>
-        <Text style={styles.title}>Role:</Text>
-        <Text style={styles.text}>{ProfileRole}</Text>
 
-        <Text style={styles.title}>Favourite Shelters:</Text>
+        <Text style={styles.title}>Favourite Shelters</Text>
         {Favourites && Favourites.length > 0 ? (
           <FlatList
             data={Favourites}
             renderItem={renderFavoriteShelter}
             keyExtractor={(item, index) => item.name + index}
-            numColumns={numColumns}
+            numColumns={3}
             columnWrapperStyle={styles.row}
             scrollEnabled={false}
           />
@@ -133,11 +164,20 @@ const UserProfile = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 
-  shelter_owner_line: {
-    marginTop: 5,
-    paddingTop: 5,
-    paddingBottom: 0,
-    flexDirection: 'row',
+  shelter_owner_tab: {
+    marginTop: 20,
+    height: 110,
+    backgroundColor: 'rgb(255, 231, 146)',
+    flexDirection: 'column',
+    borderRadius: 25,
+    padding: 20,
+    marginBottom: 30,
+    justifyContent: 'space-between'
+  },  
+
+  editIcon: {
+    transform: [{ rotate: '90deg' }],
+
   },
 
   finishRegistrationColor: {
@@ -165,34 +205,52 @@ const styles = StyleSheet.create({
   registrationButton: {
     width: 150,
     height: 25,
-    marginLeft: 10,
+    marginLeft: 5,
   },
 
   container: {
     alignItems: 'flex-start',
     flex: 1,
   },
-  settingsButton: {
+  editButton: {
     position: 'absolute',
-    right: 20,
-    top: 20,
+    bottom: 0,
+    right: 0,
+    borderColor: Constants.DARK_RED,
+    borderWidth: 0.5,
+    width: 40,
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
   body: {
     width: '100%',
     paddingHorizontal: 20,  
   },
   header: {
-    paddingLeft: 20,
-    paddingRight: 20,
     paddingTop: 20,
-    paddingBottom: 15,
+    paddingBottom: 30,
+    flexDirection: "row",
     width: '100%',
     backgroundColor: "#ff7f09",
+    justifyContent: 'space-evenly',
   },
+
+  sub_container: {
+    position: 'relative',
+    padding: 0,
+
+  },
+
   title: {
     marginBottom: 5,
     paddingTop: 40,
-    fontSize: 24,
+    fontSize: 22,
+    marginBottom: 20,
+    textAlign: 'center',
     fontWeight: "bold",
     color: "#ff7f09",
   },
@@ -203,19 +261,30 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingTop: 5,
   },
+  role: {
+    color: Constants.WHITE,
+    textAlign: 'left',
+    padding: 3,
+    fontWeight: "500",
+    paddingLeft: 10,
+    fontSize: 16,
+    backgroundColor: Constants.DARK_RED,
+    marginTop: 15,
+    borderRadius: 15,
+    width: 120,
+  },
   name: {
-    fontSize: 30,
+    fontSize: 28,
     color: "black",
     paddingTop: 10,
     fontFamily: 'CustomFont',
   },
   profile_image: {
     marginTop: 10,
-    width: 120,
-    height: 120,
-    borderRadius: 50,
-    alignSelf: 'flex-start',
-    resizeMode: 'cover'
+    width: 130,
+    height: 130,
+    borderRadius: 60,
+    resizeMode: 'cover',
   },
   favShelterContainer: {
     flex: 1,
@@ -241,9 +310,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   
-  row: {
-    justifyContent: 'space-between',
-  },
   
 });
 

@@ -15,10 +15,6 @@ const DATA = [
     data: ['Last name'],
   },
   {
-    title: 'Status',
-    data: ['Status'],
-  },
-  {
     title: 'Role',
     data: ['Role'],
   },
@@ -28,7 +24,6 @@ const SettingsPage = ({ navigation }) => {
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
-  const [status, setStatus] = useState('');
   const [role, setRole] = useState('');
 
   useEffect(() => {
@@ -45,7 +40,6 @@ const SettingsPage = ({ navigation }) => {
           const data = docSnap.data();
           setName(data.name || "");
           setSurname(data.surname || "");
-          setStatus(data.status || "");
           setRole(data.role || "");
         } else {
           console.log("No documents");
@@ -65,7 +59,6 @@ const SettingsPage = ({ navigation }) => {
         {
           name: name,
           surname: surname,
-          status: status,
           role: role,
         },
         { merge: true }
@@ -105,10 +98,6 @@ const SettingsPage = ({ navigation }) => {
                 case 'Last name':
                   value = surname;
                   onChange = setSurname;
-                  break;
-                case 'Status':
-                  value = status;
-                  onChange = setStatus;
                   break;
                 case 'Role':
                   value = role;
