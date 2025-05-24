@@ -1,27 +1,32 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Platform, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Platform,
+  Alert,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import * as Constants from '../../utilities/constants';
-import { auth, db } from '../../../config/firebase';
-import { addDoc, collection } from 'firebase/firestore';
+import * as Constants from "../../utilities/constants";
+import { auth, db } from "../../../config/firebase";
+import { addDoc, collection } from "firebase/firestore";
 import { format } from "date-fns";
 
-
 const InputPage = ({ navigation }) => {
-
   const [] = useFonts({
-      CustomFont: require("../../../assets/fonts/Roboto_Condensed-Bold.ttf"),
-    });
+    CustomFont: require("../../../assets/fonts/Roboto_Condensed-Bold.ttf"),
+  });
 
   const [shelterName, setShelterName] = useState("");
   const [animalCapacity, setAnimalCapacity] = useState(null);
   const [startHours, setStartHours] = useState(new Date());
   const [endHours, setEndHours] = useState(new Date());
   const [phoneNumber, setPhoneNumber] = useState("");
-
 
   const onChangeStartTime = (e, selectedTime) => {
     setStartHours(selectedTime);
@@ -31,7 +36,7 @@ const InputPage = ({ navigation }) => {
     setEndHours(selectedTime);
   };
 
-  const UpdateDate = async () => {
+  const UpdateData = async () => {
     if (
       shelterName != "" &&
       animalCapacity != null &&
@@ -56,13 +61,12 @@ const InputPage = ({ navigation }) => {
 
         console.log("Shelter data has been recorded");
         console.log("id: ", docRef.id);
-        navigation.navigate("QuizTemp", { shelterDocId: docRef.id });
+        navigation.navigate("ImageTemp", { shelterDocId: docRef.id });
       } catch (error) {
         Alert.alert("Error. Please try again.");
       }
-    }
-    else {
-      Alert.alert("Please fill out all the information")
+    } else {
+      Alert.alert("Please fill out all the information");
     }
   };
 
@@ -86,23 +90,23 @@ const InputPage = ({ navigation }) => {
         />
         <Text style={styles.title}>Work Hours</Text>
         <View style={styles.workHours}>
-        <DateTimePicker
-          value={startHours}
-          mode={"time"}
-          is24Hour={true}
-          accentColor={Constants.DEFAULT_ORANGE}
-          onChange={onChangeStartTime}
-          style={{marginHorizontal: 8}}
-        />
-        <Text style={{fontSize: 18}}>-</Text>
-        <DateTimePicker
-          value={endHours}
-          mode={"time"}
-          is24Hour={true}
-          accentColor={Constants.DEFAULT_ORANGE}
-          onChange={onChangeFinishTime}
-          style={{marginHorizontal: 6}}
-        />
+          <DateTimePicker
+            value={startHours}
+            mode={"time"}
+            is24Hour={true}
+            accentColor={Constants.DEFAULT_ORANGE}
+            onChange={onChangeStartTime}
+            style={{ marginHorizontal: 8 }}
+          />
+          <Text style={{ fontSize: 18 }}>-</Text>
+          <DateTimePicker
+            value={endHours}
+            mode={"time"}
+            is24Hour={true}
+            accentColor={Constants.DEFAULT_ORANGE}
+            onChange={onChangeFinishTime}
+            style={{ marginHorizontal: 6 }}
+          />
         </View>
         <Text style={styles.title}>Phone number</Text>
         <TextInput
@@ -116,10 +120,7 @@ const InputPage = ({ navigation }) => {
           autoCapitalize="none"
         />
       </View>
-      <TouchableOpacity
-        style={styles.buttonSubmit}
-        onPress={UpdateDate}
-      >
+      <TouchableOpacity style={styles.buttonSubmit} onPress={UpdateData}>
         <AntDesign size="45" name="arrowright" color="white" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -133,19 +134,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-
   workHours: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 10,
-  
   },
 
   title: {
     fontSize: 15,
     marginBottom: 5,
     marginLeft: 15,
-    fontFamily: 'CustomFont',
+    fontFamily: "CustomFont",
   },
 
   input: {
@@ -173,8 +172,7 @@ const styles = StyleSheet.create({
     fontFamily: "CustomFont",
     fontSize: 26,
     top: "5%",
-    textAlign: 'center',
-    
+    textAlign: "center",
   },
 
   buttonSubmit: {
@@ -190,4 +188,3 @@ const styles = StyleSheet.create({
 });
 
 export default InputPage;
-

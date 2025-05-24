@@ -1,29 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, FlatList, Image, TextInput, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { db } from '../../config/firebase';
-import { getDocs, collection, doc, collectionGroup } from 'firebase/firestore';
-
+import { db } from "../../config/firebase";
+import { getDocs, collectionGroup } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 //fetch of all shelters in the app
 
 async function fetchAllShelters() {
   const shelters = [];
   const snap = await getDocs(collectionGroup(db, "Shelter Information"));
-  //console.log(snap)
   for (const docSnap of snap.docs) {
-    //console.log("docsSnap:", docSnap)
+    // image reference
     const data = docSnap.data();
+    const imageRef = ref(getStorage(), `images/${docSnap.id}/ShelterBanner`);
+    const imageURL = await getDownloadURL(imageRef);
+    console.log("imageURL", imageURL);
+    //
 
     shelters.push({
-      id:   docSnap.id,
+      imageURL: imageURL,
+      id: docSnap.id,
       name: data.shelterName,
-      address: "Address", 
-      phone:  data.phoneNumber,
-      capacity: data.animalCapacity,         
+      address: "Address",
+      phone: data.phoneNumber,
+      capacity: data.animalCapacity,
       startHours: data.startHours,
       endHours: data.endHours,
-      
     });
   }
 
@@ -32,56 +43,58 @@ async function fetchAllShelters() {
 
 ////////////////////
 
-
-
-const ShelterComponent = ({ shelter,  navigation }) => (
+const ShelterComponent = ({ shelter, navigation }) => (
   //passing shelter props inside navigation props to the Shelter Profile component
-  <TouchableOpacity onPress={() => navigation.navigate('ShelterProfile', { shelter })}> 
-  <View style={styles.card}>
-    <Image
-        style={styles.shelter_image}
-        source={require("../../assets/images/animal_shelter_image_profile.webp")}
-    />
-    
-    <View style={styles.cardContent}>
-      <Text style={styles.shelterName}>{shelter.name}</Text>
-      <Text style={styles.shelterDetail}>📍 {shelter.address}</Text>
-      <Text style={styles.shelterDetail}>📞 {shelter.phone}</Text>
-      <Text style={styles.shelterDetail}>🏠 Capacity: {shelter.capacity}</Text>
+  <TouchableOpacity
+    onPress={() => navigation.navigate("ShelterProfile", { shelter })}
+  >
+    <View style={styles.card}>
+      <Image style={styles.shelter_image} source={{ uri: shelter.imageURL }} />
 
-      <View style={styles.metaRow}>
-        <View style={styles.metaPill}>
-          <Text style={styles.metaPillText}>🕚 {shelter.startHours} - {shelter.endHours}</Text>
+      <View style={styles.cardContent}>
+        <Text style={styles.shelterName}>{shelter.name}</Text>
+        <Text style={styles.shelterDetail}>📍 {shelter.address}</Text>
+        <Text style={styles.shelterDetail}>📞 {shelter.phone}</Text>
+        <Text style={styles.shelterDetail}>
+          🏠 Capacity: {shelter.capacity}
+        </Text>
+
+        <View style={styles.metaRow}>
+          <View style={styles.metaPill}>
+            <Text style={styles.metaPillText}>
+              🕚 {shelter.startHours} - {shelter.endHours}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
-   
-  </View>
   </TouchableOpacity>
 );
 
-const SheltersMenu = ( { navigation } ) => {
+const SheltersMenu = ({ navigation }) => {
   const [search, setSearch] = useState("");
 
   const [shelters, setShelters] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {     //fetch of all shelters 
+  useEffect(() => {
+    //fetch of all shelters
     fetchAllShelters()
       .then((list) => setShelters(list))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  
-
-  if (loading) {      //shelters loading
+  if (loading) {
+    //shelters loading
     return <Text>Loading shelters…</Text>;
   }
 
   //console.log(shelters);
 
-  const renderItem = ({ item }) => <ShelterComponent shelter={item} navigation={navigation}/>;
+  const renderItem = ({ item }) => (
+    <ShelterComponent shelter={item} navigation={navigation} />
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -175,8 +188,3 @@ const styles = StyleSheet.create({
 });
 
 export default SheltersMenu;
-
-
-
-
-

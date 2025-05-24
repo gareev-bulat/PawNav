@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text, Alert,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, Alert, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AntDesign,
@@ -12,58 +8,50 @@ import {
 } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { storage, auth } from "../../../config/firebase";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as Constants from "../../utilities/constants";
 
-
-export default function UploadTemp( { navigation, route } ) {
-
-
+export default function UploadTemp({ navigation, route }) {
   const [fileName, setFileName] = useState("");
   const [picked, setPicked] = useState(false);
 
   const { shelterDocId } = route.params;
 
   async function pickDocument() {
-  try {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: 'application/pdf',
-      copyToCacheDirectory: true,
-    });
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+        copyToCacheDirectory: true,
+      });
 
-    if (result.canceled) {
-      return;
+      if (result.canceled) {
+        return;
+      }
+      const { uri, name } = result.assets[0];
+
+      const response = await fetch(uri);
+      const blob = await response.blob();
+
+      const user = auth.currentUser;
+
+      if (!user) throw new Error("Must be signed in to upload");
+
+      console.log(result);
+
+      const storageRef = ref(storage, `pdfs/${shelterDocId}/${name}`);
+      await uploadBytes(storageRef, blob);
+      console.log("✅ UploadBytes succeeded");
+      Alert.alert("✅ Document Upload succeeded");
+      setPicked(true);
+      setFileName(result["assets"][0]["name"]);
+
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log("🔗 download URL:", downloadURL);
+    } catch (err) {
+      console.error("Error uploading doc", err);
+      Alert.alert("❌ Error", err.message);
     }
-    const { uri, name } = result.assets[0];
-
-    const response = await fetch(uri);
-    const blob = await response.blob();
-
-    const user = auth.currentUser;
-
-    if (!user) throw new Error("Must be signed in to upload");
-
-    console.log(result);
-
-    const storageRef = ref(storage, `users/${user.uid}/pdfs/${name}`);
-    await uploadBytes(storageRef, blob);
-    console.log('✅ UploadBytes succeeded');
-    Alert.alert('✅ Upload succeeded');
-    setPicked(true);
-    setFileName(result["assets"][0]["name"]);
-
-    const downloadURL = await getDownloadURL(storageRef);
-    console.log('🔗 download URL:', downloadURL);
-
-  } catch (err) {
-    console.error('Error uploading doc', err);
-    Alert.alert('❌ Error', err.message);
   }
-}
 
   return (
     <SafeAreaView style={styles.container}>
@@ -82,9 +70,7 @@ export default function UploadTemp( { navigation, route } ) {
             color={Constants.DEFAULT_ORANGE}
           />
         )}
-        <Text style={styles.text}>
-          {picked ? fileName : "Upload pdf file"}
-        </Text>
+        <Text style={styles.text}>{picked ? fileName : "Upload pdf file"}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

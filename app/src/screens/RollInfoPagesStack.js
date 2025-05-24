@@ -1,21 +1,19 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native'
+import React from "react";
+import { View, StyleSheet } from "react-native";
 
+import RollInfoPages from "./RollInfoPages";
+import ImageTemp from "./RollInfoTemplates/ImageTemp";
+import LocationTemp from "./RollInfoTemplates/LocationTemp";
+import UploadTemp from "./RollInfoTemplates/UploadTemp";
+import EndPage from "./RollInfoTemplates/EndPage";
+import InputPage from "./RollInfoTemplates/InputPage";
 
-
-import RollInfoPages from './RollInfoPages'
-import QuizTemp from './RollInfoTemplates/QuizTemp'
-import LocationTemp from './RollInfoTemplates/LocationTemp'
-import UploadTemp from './RollInfoTemplates/UploadTemp'
-import EndPage from './RollInfoTemplates/EndPage'
-import InputPage from './RollInfoTemplates/InputPage'
-
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
-
-
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
-
 
 const RollInfoPagesStack = () => {
   return (
@@ -27,7 +25,7 @@ const RollInfoPagesStack = () => {
       }}
     >
       <Stack.Screen name="RollInfoPages" component={RollInfoPages} />
-      <Stack.Screen name="QuizTemp" component={QuizTemp} />
+      <Stack.Screen name="ImageTemp" component={ImageTemp} />
       <Stack.Screen name="InputPage" component={InputPage} />
       <Stack.Screen name="UploadTemp" component={UploadTemp} />
       <Stack.Screen name="LocationTemp" component={LocationTemp} />
@@ -37,4 +35,3 @@ const RollInfoPagesStack = () => {
 };
 
 export default RollInfoPagesStack;
-

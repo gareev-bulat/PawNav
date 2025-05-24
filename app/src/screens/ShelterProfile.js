@@ -1,11 +1,28 @@
-import React, {useEffect, useState} from "react";
-import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity} from "react-native";
-import { useFonts } from 'expo-font'
-import  Ionicons  from "@expo/vector-icons/Ionicons";
-import { auth, db } from '../../config/firebase';
-import { doc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { useFonts } from "expo-font";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { auth, db } from "../../config/firebase";
+import {
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  onSnapshot,
+} from "firebase/firestore";
+import * as Constants from '../utilities/constants';
 
-const ShelterProfile = ( { navigation, route } ) => { //route for passing props fro SheltersMenu component
+
+const ShelterProfile = ({ navigation, route }) => {
+  //route for passing props fro SheltersMenu component
 
   const handleAdoption = () => alert("Adopt!");
   const handleVolunteering = () => alert("Volunteer!");
@@ -16,64 +33,53 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
   const [isFavorite, setIsFavorite] = useState(false);
 
   const uid = auth.currentUser ? auth.currentUser.uid : null;
-  console.log(uid);
-  console.log("shelter: ", shelter)
-
+  console.log("shelter: ", shelter.imageURL);
 
   useEffect(() => {
     if (!uid) return;
 
-    const userDocRef = doc(db, 'users', uid);
-    
+    const userDocRef = doc(db, "users", uid);
 
     const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
       if (docSnap.exists()) {
-        console.log(docSnap.data())
+        console.log(docSnap.data());
         const favourites = docSnap.data().favourites || [];
-        console.log(favourites.includes(shelter.name))
+        console.log(favourites.includes(shelter.name));
         setIsFavorite(favourites.includes(shelter.name));
       }
     });
 
     return unsubscribe;
   }, [uid]);
-  
-  
-
-
 
   const toggleFavorite = async () => {
-
-    setIsFavorite(prev => !prev);
-    
+    setIsFavorite((prev) => !prev);
 
     if (!uid) return;
 
-    const userDocRef = doc(db, 'users', uid);
+    const userDocRef = doc(db, "users", uid);
 
     try {
       if (!isFavorite) {
         await updateDoc(userDocRef, {
           favourites: arrayUnion(
-            shelter.name,
-            //imageUrl: shelter.imageUrl
+            shelter.name
           ),
         });
       } else {
         await updateDoc(userDocRef, {
           favourites: arrayRemove(
-            shelter.name,
-            //imageUrl: shelter.imageUrl 
+            shelter.name
           ),
         });
-      } 
+      }
     } catch (error) {
       console.error("Error updating favorites: ", error);
     }
   };
 
   const [] = useFonts({
-    'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
+    CustomFont: require("../../assets/fonts/PlayfairDisplay-Bold.ttf"),
   });
 
   let ShelterInformation = "Information";
@@ -93,10 +99,7 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
 
           <Text style={styles.name}>{shelter.name}</Text>
 
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={toggleFavorite}
-          >
+          <TouchableOpacity style={styles.iconButton} onPress={toggleFavorite}>
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
               size={30}
@@ -108,7 +111,7 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
         {/* Image */}
         <Image
           style={styles.shelter_image}
-          source={require("../../assets/images/animal_shelter_image_profile.webp")}
+          source={{ uri: shelter.imageURL }}
         />
 
         {/* Info Section */}
@@ -156,88 +159,76 @@ const ShelterProfile = ( { navigation, route } ) => { //route for passing props 
   );
 };
 
-
 const styles = StyleSheet.create({
-    wrapper: {
-        padding: 15,
-        alignItems: "left",
-        flex: 1,
-    },
+  wrapper: {
+    padding: 15,
+    alignItems: "left",
+    flex: 1,
+  },
 
-    title: {
-        marginBottom: 10,
-        paddingTop: 10, 
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "#ff7f09",
-    },
+  title: {
+    marginBottom: 10,
+    paddingTop: 10,
+    fontSize: 24,
+    fontWeight: "bold",
+    color: Constants.DEFAULT_ORANGE,
+  },
 
-    text: {
-        marginBottom: 10,
-        fontSize: 12,
-        fontWeight: 500,
-        color: 'black',
-        paddingTop: 5,
-    },
+  text: {
+    marginBottom: 10,
+    fontSize: 12,
+    fontWeight: 500,
+    color: Constants.BLACK,
+    paddingTop: 5,
+  },
 
-   
-
-    
-    buttonRow: {
-      flexDirection: 'column',
-      marginTop: 15,
-    
+  buttonRow: {
+    flexDirection: "column",
+    marginTop: 15,
   },
 
   buttonText: {
-      color: 'white',
-      fontWeight: '600',
-      textAlign: 'center',
+    color: Constants.WHITE,
+    fontWeight: "600",
+    textAlign: "center",
   },
 
   alternate_font: {
-    color: '#ff7f09',
-
+    color: "#ff7f09",
   },
-  
+
   container: {
     flex: 1,
     backgroundColor: "#fff",
   },
 
-  scroll: {
-    paddingBottom: 30,
-  },
-
   header: {
-    backgroundColor: "#ff7f09",
-    paddingVertical: 12,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    backgroundColor: Constants.DEFAULT_ORANGE,
+    paddingVertical: 10,
     paddingHorizontal: 16,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
   },
 
   name: {
-    fontSize: 26,
-    color: "black",
+    fontSize: 30,
+    color: Constants.DARK_RED,
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: "CustomFont",
   },
   shelter_image: {
     width: "90%",
     height: 200,
     alignSelf: "center",
-    borderRadius: 15,
+    borderRadius: 10,
     marginTop: 20,
     resizeMode: "cover",
   },
   content: {
     paddingHorizontal: 20,
-    marginTop: 20,
+    marginTop: 10,
   },
   sectionTitle: {
     fontWeight: "bold",
@@ -247,7 +238,8 @@ const styles = StyleSheet.create({
   },
   sectionText: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 5,
+    marginTop: 5,
   },
   locationContainer: {
     flexDirection: "row",
@@ -262,7 +254,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 14,
     paddingHorizontal: 16,
-    borderRadius: 12,
+    borderRadius: 10,
     marginTop: 12,
     alignItems: "center",
   },
@@ -289,12 +281,9 @@ const styles = StyleSheet.create({
   iconButton: {
     widht: 50,
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default ShelterProfile;
-
-
-
