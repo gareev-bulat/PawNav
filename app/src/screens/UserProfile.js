@@ -5,6 +5,9 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { auth, db } from '../../config/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 import * as Constants from '../utilities/constants';
+import * as Progress from 'react-native-progress';
+import { AntDesign } from "@expo/vector-icons";
+
 
 const UserProfile = ({ navigation }) => {
 
@@ -71,6 +74,30 @@ const UserProfile = ({ navigation }) => {
     </View>
   )
 
+  const getColor = () => {
+    switch (RegistrationStatus) {
+      case 'Finish registration':
+        return Constants.DARK_RED;
+      case "Pending":
+        return Constants.YELLOW;
+      case "Approved":
+        return Constants.GREEN;
+    }
+  }
+
+  const getProgress = () => {
+    switch (RegistrationStatus) {
+      case 'Finish registration':
+        return 0.35;
+      case "Pending":
+        return 0.7;
+      case "Approved":
+        return 1.0;
+    }
+
+
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,13 +130,8 @@ const UserProfile = ({ navigation }) => {
 
       <ScrollView style={styles.body} indicatorStyle="white">
         {ShelterOwner && (
-          <View style={styles.shelter_owner_tab}>
-            <Text>🏠 New shelter registration</Text>
-            <TouchableOpacity
-              disabled={RegistrationStatus != "Finish registration"}
-              style={styles.registrationButton}
-              onPress={() => navigation.navigate("RollInfoPagesStack")}
-            >
+          <TouchableOpacity disabled={RegistrationStatus != "Finish registration"} style={styles.shelter_owner_tab} onPress={() => navigation.navigate("RollInfoPagesStack")}>
+            <View style={styles.registrationButton}>
               {RegistrationStatus == "Finish registration" && (
                 <Text
                   style={[
@@ -117,7 +139,7 @@ const UserProfile = ({ navigation }) => {
                     styles.finishRegistrationColor,
                   ]}
                 >
-                  {RegistrationStatus}
+                  Complete shelter registration
                 </Text>
               )}
               {RegistrationStatus == "Pending" && (
@@ -127,7 +149,7 @@ const UserProfile = ({ navigation }) => {
                     styles.PendingRegistrationColor,
                   ]}
                 >
-                  {RegistrationStatus}
+                  Pending shelter registration
                 </Text>
               )}
               {RegistrationStatus == "Approved" && (
@@ -137,11 +159,17 @@ const UserProfile = ({ navigation }) => {
                     styles.ApprovedRegistrationColor,
                   ]}
                 >
-                  {RegistrationStatus}
+                  Shelter is approved
                 </Text>
               )}
-            </TouchableOpacity>
-          </View>
+            </View>
+            <View style={styles.progress_bar_container}>
+              <View style={styles.progress_bar}>
+              <Progress.Bar progress={getProgress()} color={getColor()} width={300} height={8} />
+              </View>
+              <AntDesign name="right" size={16} color={Constants.DARK_RED} />
+            </View>
+          </TouchableOpacity>
         )}
 
         <Text style={styles.title}>Favourite Shelters</Text>
@@ -164,9 +192,18 @@ const UserProfile = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 
+  progress_bar_container: {
+    margin: 0,
+    padding: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+
   shelter_owner_tab: {
     marginTop: 20,
-    height: 110,
+    height: 100,
     backgroundColor: 'rgb(255, 231, 146)',
     flexDirection: 'column',
     borderRadius: 25,
@@ -196,16 +233,20 @@ const styles = StyleSheet.create({
   },
 
   registrationButtonText: {
-    fontSize: 12,
+    fontSize: 15,
     padding: 3,
+    fontWeight: 500,
+    borderColor: Constants.DEFAULT_ORANGE,
+    borderWidth: 1,
     textAlign: 'center',
     textAlignVertical: 'center',
   },
 
   registrationButton: {
-    width: 150,
-    height: 25,
-    marginLeft: 5,
+    width: 230,
+    height: 50,
+    paddingVertical: 6,
+    
   },
 
   container: {
