@@ -6,37 +6,49 @@ const VolunteeringPage = () => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <Text style={styles.title}>Get Involved: Animal Shelter Volunteering</Text>
+                <Text style={styles.title}>🐾 Get Involved: Animal Shelter Volunteering</Text>
+
+                <Text style={styles.intro}>
+                    Whether you're an animal lover, a community builder, or someone looking to make a difference,
+                    there's a place for you here. Explore the ways you can help below!
+                </Text>
 
                 <Section 
                     title="Adoption Events" 
-                    description="Join us in hosting adoption days where loving animals meet their new families." 
+                    description="Join us in hosting adoption days where loving animals meet their new families. These joyful events are perfect for friendly faces and helping hands." 
                     style={styles.adoptionEvents} 
                 />
                 
                 <Section 
                     title="Shelter Care" 
-                    description="Lend a hand with daily tasks like feeding, grooming, and ensuring the shelter stays welcoming." 
+                    description="Lend a hand with daily tasks like feeding, grooming, walking, and keeping our furry friends happy and healthy." 
                     style={styles.shelterCare} 
                 />
 
                 <Section 
                     title="Foster Program" 
-                    description="Offer a temporary home to animals in transition, giving them love and stability." 
+                    description="Offer a temporary home to animals in transition. Fosters provide essential love, comfort, and socialization to prepare pets for adoption." 
                     style={styles.fosterProgram} 
                 />
 
                 <Section 
                     title="Fundraising & Supplies" 
-                    description="Help gather essential items and raise vital funds to keep our animals healthy and happy." 
+                    description="Help organize donation drives, supply collections, and online fundraisers that directly impact our shelter's ability to thrive." 
                     style={styles.fundraising} 
                 />
 
                 <Section 
                     title="Community Education" 
-                    description="Spread awareness about responsible pet care and the benefits of adoption in your community." 
+                    description="Become an advocate by sharing knowledge about pet care, adoption benefits, and the importance of spaying and neutering." 
                     style={styles.communityEducation} 
                 />
+
+                <View style={styles.contactSection}>
+                    <Text style={styles.contactTitle}>📬 Want to Get Started?</Text>
+                    <Text style={styles.contactText}>Email us at: volunteer@animalshelter.org</Text>
+                    <Text style={styles.contactText}>Call: (555) 123-4567</Text>
+                    <Text style={styles.contactText}>Visit: 123 Paw Street, Petville, USA</Text>
+                </View>
             </ScrollView>
         </SafeAreaView>
     );
@@ -52,59 +64,85 @@ const Section = ({ title, description, style }) => (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "#fefefe",
     },
     scrollContainer: {
         padding: 20,
         alignItems: "center",
     },
     title: {
-        fontSize: 30,
+        fontSize: 32,
         fontWeight: "800",
         color: "#37474f",
-        marginBottom: 35,
+        marginBottom: 20,
         textAlign: "center",
     },
+    intro: {
+        fontSize: 16,
+        color: "#455a64",
+        textAlign: "center",
+        marginBottom: 30,
+        lineHeight: 24,
+    },
     section: {
-        marginBottom: 25,
-        padding: 25,
+        marginBottom: 20,
+        padding: 20,
         borderRadius: 20,
         width: "100%",
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 6,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        elevation: 4,
     },
     sectionTitle: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: "700",
         marginBottom: 10,
         color: "#263238",
         textAlign: "center",
     },
     description: {
-        fontSize: 16,
+        fontSize: 15,
         color: "#546e7a",
         textAlign: "center",
-        lineHeight: 24,
+        lineHeight: 22,
     },
     adoptionEvents: {
-        backgroundColor: "#ffe0b2",
+        backgroundColor: "#fff3e0",
     },
     shelterCare: {
-        backgroundColor: "#c8e6c9",
+        backgroundColor: "#e8f5e9",
     },
     fosterProgram: {
-        backgroundColor: "#b3e5fc",
+        backgroundColor: "#e1f5fe",
     },
     fundraising: {
-        backgroundColor: "#d1c4e9",
+        backgroundColor: "#ede7f6",
     },
     communityEducation: {
-        backgroundColor: "#ffccbc",
+        backgroundColor: "#fbe9e7",
+    },
+    contactSection: {
+        marginTop: 30,
+        padding: 20,
+        backgroundColor: "#e0f7fa",
+        borderRadius: 16,
+        alignItems: "center",
+    },
+    contactTitle: {
+        fontSize: 20,
+        fontWeight: "700",
+        marginBottom: 10,
+        color: "#00796b",
+    },
+    contactText: {
+        fontSize: 14,
+        color: "#004d40",
+        marginBottom: 4,
     },
 });
 
 export default VolunteeringPage;
+
 
