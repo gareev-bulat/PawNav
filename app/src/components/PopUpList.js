@@ -39,11 +39,13 @@ const PopUpList = ({ isVisible, onItemPress }) => {
       console.log("Starting fetch process...")
       fetchMarkers()
       .then(list => {
+        const sortedList = list.sort((a, b) =>
+          a.name.localeCompare(b.name)
+      );
         console.log(list);
         setShelters(list);
       })
       .catch(err => console.error(err))
-  
     }, []);
 
   
