@@ -65,6 +65,7 @@ const SearchComponent = () => {
           console.log('Item pressed');
           setPopupVisible(false);
         }}
+        searchText={text}
       />
     </View>
   );

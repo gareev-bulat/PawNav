@@ -7,7 +7,7 @@ import { db } from '../../config/firebase';
 import { getDocs, collection, doc, collectionGroup } from 'firebase/firestore';
 
 
-const PopUpList = ({ isVisible, onItemPress }) => {
+const PopUpList = ({ isVisible, onItemPress, searchText = '' }) => {
 
   const { setPrompts } = useContext(MapPrompts);
   const { prompts } = useContext(MapPrompts);
@@ -56,7 +56,15 @@ const PopUpList = ({ isVisible, onItemPress }) => {
   return (
     <View style={styles.popUpList}>
       <FlatList
-        data={shelters}
+        data={
+          searchText.length > 0
+          ? shelters
+            .filter(shelter =>
+              shelter.name.toLowerCase().includes(searchText.toLowerCase())
+            )
+            .sort((a, b) => a.name.localeCompare(b.name))
+          : []
+        }
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
