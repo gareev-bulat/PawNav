@@ -43,7 +43,7 @@ const SearchComponent = () => {
           paddingLeft: 20,
           backgroundColor: 'rgba(255, 255, 255, 0.9)',
           borderColor: Constants.DARK_RED,
-          marginTop: 15,
+          marginTop: 5,
         }}
         placeholder="Search"
         onFocus={() => {

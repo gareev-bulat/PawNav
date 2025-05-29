@@ -132,14 +132,19 @@ const styles = StyleSheet.create({
     height: 150,
   },
   searchInput: {
-    borderWidth: 1,
+    width: '104%',
+    right: '2%',
+    height: 45,
+    borderWidth: 1.47,
     borderColor: "#ccc",
     borderRadius: 20,
     padding: 10,
-    marginTop: -40,
+    paddingLeft: 20,
+    marginTop: -50,
     marginBottom: 16,
-    fontSize: 16,
+    fontSize: 14,
     backgroundColor: "#fff",
+    borderColor: "#8B0000"
   },
   card: {
     backgroundColor: "#ffffff",
