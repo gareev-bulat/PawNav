@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Image, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -10,6 +10,14 @@ const LocationTemp = ({ navigation }) => {
     const [] = useFonts({
         CustomFont: require("../../../assets/fonts/Roboto_Condensed-Bold.ttf"),
       });
+
+    const Redirection = () => {
+
+       Alert.alert("PLease wait for 3-5 business days for shelter approval")
+
+       navigation.navigate("Tabs", { screen: "UserProfile" })
+
+    }
 
 
     return (
@@ -29,7 +37,7 @@ const LocationTemp = ({ navigation }) => {
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Tabs", { screen: "UserProfile" })}
+          onPress={Redirection}
         >
           <AntDesign size="45" name="arrowright" color="white" />
         </TouchableOpacity>

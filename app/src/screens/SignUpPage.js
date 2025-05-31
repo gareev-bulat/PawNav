@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFonts } from 'expo-font';
-import Tabs from '../components/Tabs';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import * as Constants from '../utilities/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { auth, db } from '../../config/firebase';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 
 const SignUpPage = ({ navigation }) => {
@@ -19,10 +17,6 @@ const SignUpPage = ({ navigation }) => {
   const [error, setError] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [owner, setOwner] = useState(false);
-  const [items, setItems] = useState([
-             {label: 'Volunteer', value: 'V'},                  
-             {label: 'Shelter administrator', value: 'S'},
-               ]);
 
   const [] = useFonts({'CustomFont': require('../../assets/fonts/PlayfairDisplay-Bold.ttf'),
   });
@@ -43,6 +37,7 @@ const SignUpPage = ({ navigation }) => {
           name: name,
           surname: surname,   
           owner: owner,
+          profileImageURL: "",
           registrationStatus: "Finish registration",   
           createdAt: Date.now(),
         });
@@ -53,6 +48,7 @@ const SignUpPage = ({ navigation }) => {
           name: name,
           surname: surname,   
           owner: owner, 
+          profileImageURL: "",
           createdAt: Date.now(),
         });
       }
@@ -63,7 +59,6 @@ const SignUpPage = ({ navigation }) => {
       setError(err.message);
     }
   };
-  //
 
   return (
     <View style={styles.container}>
@@ -86,34 +81,7 @@ const SignUpPage = ({ navigation }) => {
         value={surname}
         onChangeText={setSurname}
       />
-      {/*<Text style={styles.title}>Position:</Text>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="position"
-        style={{
-          borderColor: Constants.DARK_RED,
-          borderWidth: 1,
-          borderRadius: 15,
-          paddingHorizontal: 10,
-          marginBottom: 30,
-          height: 40,
-        }}
-        itemStyle={{ height: 60, justifyContent: "center" }}
-        dropDownContainerStyle={{
-          borderColor: Constants.DARK_RED,
-          borderWidth: 1,
-        }}
-        listItemLabelStyle={{
-          fontFamily: 'CustomFont', 
-          fontSize: 14,
-          color: '#000',
-        }}
-      />*/}
+      
       <Text style={styles.title}>Email:</Text>
       <TextInput
         style={styles.input}

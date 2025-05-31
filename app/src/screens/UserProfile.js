@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, Alert } from 'react-native';
 import { useFonts } from 'expo-font';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { auth, db } from '../../config/firebase';
@@ -7,7 +7,8 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import * as Constants from '../utilities/constants';
 import * as Progress from 'react-native-progress';
 import { AntDesign } from "@expo/vector-icons";
-
+import { getDownloadURL, ref, getStorage, uploadBytes } from "firebase/storage";
+import { collection, getDocs } from "firebase/firestore";
 
 const UserProfile = ({ navigation }) => {
 
@@ -17,8 +18,56 @@ const UserProfile = ({ navigation }) => {
   
   const [userData, setUserData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
+  const [imageURL, setImageURL] = useState("");
+  const [yourShelters, setYourShelters] = useState([]);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [vanishTrigger, setVanishTrigger] = useState(false);
+
+  const NUM_COLUMNS = 2;
+  
 
   const uid = auth.currentUser ? auth.currentUser.uid : null;
+
+  const fetchImage = async() => {
+
+    setImageLoading(true);
+
+    try{
+
+      const imageRef = ref(getStorage(), `UserImages/${uid}/UserProfileImage`);
+    const imageURL = await getDownloadURL(imageRef);
+    setImageURL(imageURL);
+
+
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+  const fetchYourShelters = async () => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) throw new Error("Not signed in");
+
+    const sheltersRef = collection(db, "users", uid, "Shelter Information");
+    const snap = await getDocs(sheltersRef);
+
+    const storage = getStorage();
+
+    const shelters = await Promise.all(
+          snap.docs
+              .filter(d => d.data().shelterStatus === "Published")
+              .map(async d => {
+                const data = d.data();
+                const imgRef = ref(storage, `images/${d.id}/ShelterBanner`);
+                const url = await getDownloadURL(imgRef);
+                return { id: d.id, imageURL: url, shelterName: data.shelterName };
+              })
+    );
+
+    setYourShelters(shelters);
+    
+  };
+
 
   useEffect(() => {
     if (!uid) {
@@ -26,13 +75,20 @@ const UserProfile = ({ navigation }) => {
       return;
     }
 
+   
+
+    fetchYourShelters();
+
+    fetchImage();
+
     const userDocRef = doc(db, 'users', uid);
     const unsubscribe = onSnapshot(
       userDocRef,
       (docSnap) => {
         if (docSnap.exists()) {
           setUserData(docSnap.data());
-          console.log('Fetched user data: ', docSnap.data()); 
+          console.log('Fetched user data: ', docSnap.data());
+           
         } else {
           console.log("No documents");
         }
@@ -62,16 +118,25 @@ const UserProfile = ({ navigation }) => {
   let RegistrationStatus = userData?.registrationStatus;
   let Favourites = userData?.favourites || [];
 
+  console.log("userData: ", userData)
+
   console.log('Favourites data: ', Favourites); 
 
-  const renderFavoriteShelter = ({ item }) => (
-    <View style={styles.favShelterContainer}>
+  const startPendingAndNavigate = () => {
+
+    RegistrationStatus = "Pending";
+    navigation.navigate("RollInfoPagesStack");
+  };
+
+
+  const RenderShelter = ({ item }) => (
+    <TouchableOpacity onPress={() => Alert.alert(item.shelterName)} style={[styles.ShelterContainer, { flexBasis: `${100 / NUM_COLUMNS}%` }]}>
       <Image
-        source={require('../../assets/images/animal_shelter_image_profile.webp')}
-        style={styles.favShelterImage}
+        source={{ uri: item.imageURL }}
+        style={styles.ShelterImage}
       />
-      <Text style={styles.favShelterName}>{item}</Text>
-    </View>
+      <Text style={styles.ShelterName}>{item.shelterName}</Text>
+    </TouchableOpacity>
   )
 
   const getColor = () => {
@@ -98,6 +163,16 @@ const UserProfile = ({ navigation }) => {
 
   }
 
+  const onPressHandler = () => {
+
+    if (RegistrationStatus === "Approved"){
+       setVanishTrigger(true);
+       return;
+    }
+    navigation.navigate("RollInfoPagesStack")
+
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -105,8 +180,23 @@ const UserProfile = ({ navigation }) => {
         <View style={styles.sub_container}>
           <Image
             style={styles.profile_image}
-            source={require("../../assets/images/profile_image.jpeg")}
+            source={
+              imageURL
+                ? { uri: imageURL }
+                : require("../../assets/images/profile_temp.jpg")
+            }
+            onLoadStart={() => setImageLoading(true)}
+            onLoadEnd={() => setImageLoading(false)}
+            onError={() => setImageLoading(false)}
           />
+
+          {imageLoading && (
+            <ActivityIndicator
+              size="small"
+              color={Constants.DARK_RED}
+              style={styles.imageSpinner}
+            />
+          )}
           <View style={styles.editButton}>
             <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
               <FontAwesome5
@@ -119,71 +209,116 @@ const UserProfile = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.right_content}>
-        <Text style={styles.name}>
-          {ProfileName} {ProfileSurname}
-        </Text>
+          <Text style={styles.name}>
+            {ProfileName} {ProfileSurname}
+          </Text>
 
-        <Text style={styles.role}>{ProfileRole}</Text>
-      
+          <Text style={styles.role}>{ProfileRole}</Text>
         </View>
       </View>
 
       <ScrollView style={styles.body} indicatorStyle="white">
-        {ShelterOwner && (
-          <TouchableOpacity disabled={RegistrationStatus != "Finish registration"} style={styles.shelter_owner_tab} onPress={() => navigation.navigate("RollInfoPagesStack")}>
-            <View style={styles.registrationButton}>
-              {RegistrationStatus == "Finish registration" && (
-                <Text
-                  style={[
-                    styles.registrationButtonText,
-                    styles.finishRegistrationColor,
-                  ]}
-                >
-                  Complete shelter registration
-                </Text>
-              )}
-              {RegistrationStatus == "Pending" && (
-                <Text
-                  style={[
-                    styles.registrationButtonText,
-                    styles.PendingRegistrationColor,
-                  ]}
-                >
-                  Pending shelter registration
-                </Text>
-              )}
-              {RegistrationStatus == "Approved" && (
-                <Text
-                  style={[
-                    styles.registrationButtonText,
-                    styles.ApprovedRegistrationColor,
-                  ]}
-                >
-                  Shelter is approved
-                </Text>
-              )}
-            </View>
-            <View style={styles.progress_bar_container}>
-              <View style={styles.progress_bar}>
-              <Progress.Bar progress={getProgress()} color={getColor()} width={300} height={8} />
+        {ShelterOwner &&
+          !vanishTrigger &&
+          RegistrationStatus != "No registration" && (
+            <TouchableOpacity
+              disabled={RegistrationStatus == "Pending"}
+              style={styles.shelter_owner_tab}
+              onPress={onPressHandler}
+            >
+              <View style={styles.registrationButton}>
+                {RegistrationStatus == "Finish registration" && (
+                  <Text
+                    style={[
+                      styles.registrationButtonText,
+                      styles.finishRegistrationColor,
+                    ]}
+                  >
+                    Complete shelter registration
+                  </Text>
+                )}
+                {RegistrationStatus == "Pending" && (
+                  <Text
+                    style={[
+                      styles.registrationButtonText,
+                      styles.PendingRegistrationColor,
+                    ]}
+                  >
+                    Pending shelter registration
+                  </Text>
+                )}
+                {RegistrationStatus == "Approved" && (
+                  <Text
+                    style={[
+                      styles.registrationButtonText,
+                      styles.ApprovedRegistrationColor,
+                    ]}
+                  >
+                    Shelter is approved
+                  </Text>
+                )}
               </View>
-              <AntDesign name="right" size={16} color={Constants.DARK_RED} />
-            </View>
-          </TouchableOpacity>
+              <View style={styles.progress_bar_container}>
+                <View style={styles.progress_bar}>
+                  <Progress.Bar
+                    progress={getProgress()}
+                    color={getColor()}
+                    width={300}
+                    height={8}
+                  />
+                </View>
+                <AntDesign name="right" size={16} color={Constants.DARK_RED} />
+              </View>
+            </TouchableOpacity>
+          )}
+
+        {yourShelters.length > 0 && (
+          <>
+            <Text style={styles.title}>Your Shelters</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={true}
+              contentContainerStyle={styles.scrollViewContent}
+              style={styles.boxStyle}
+            >
+              {yourShelters.map((item) => (
+                <RenderShelter key={item.id} item={item} />
+              ))}
+
+              <TouchableOpacity
+                onPress={startPendingAndNavigate}
+                style={[
+                  styles.addCardTouchable,
+                  { flexBasis: `${100 / NUM_COLUMNS}%` },
+                ]}
+              >
+                <View style={styles.addIconWrapper}>
+                  <FontAwesome5
+                    name="plus"
+                    size={40}
+                    color={Constants.DARK_RED}
+                  />
+                </View>
+                <Text style={styles.addCardText}>Add Shelter</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </>
         )}
 
         <Text style={styles.title}>Favourite Shelters</Text>
-        {Favourites && Favourites.length > 0 ? (
-          <FlatList
-            data={Favourites}
-            renderItem={renderFavoriteShelter}
-            keyExtractor={(item, index) => item.name + index}
-            numColumns={3}
-            columnWrapperStyle={styles.row}
-            scrollEnabled={false}
-          />
-        ) : (
-          <Text style={styles.text}>No favourite shelters yet.</Text>
+        {Favourites && Favourites.length > 0 && (
+          <>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={true}
+              contentContainerStyle={styles.scrollViewContent}
+              style={styles.boxStyle}
+            >
+              {Favourites.map((item) => (
+                <RenderShelter key={item.id} item={item} />
+              ))}
+            </ScrollView>
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -200,6 +335,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
+  scrollViewContent: {
+
+    flexDirection: "row",
+    alignItems:    "center",
+    columnGap:     25,          
+    paddingHorizontal: 10, 
+
+
+
+  },
+
+  boxStyle: {
+
+
+    backgroundColor: 'rgb(255, 231, 146)',
+    borderRadius: 30,
+    padding: 30,
+    height: 220,
+
+  },
+
 
   shelter_owner_tab: {
     marginTop: 20,
@@ -211,6 +367,16 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     justifyContent: 'space-between'
   },  
+
+  imageSpinner: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 
   editIcon: {
     transform: [{ rotate: '90deg' }],
@@ -243,7 +409,7 @@ const styles = StyleSheet.create({
   },
 
   registrationButton: {
-    width: 230,
+    width: 260,
     height: 50,
     paddingVertical: 6,
     
@@ -301,6 +467,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: 'black',
     paddingTop: 5,
+    alignSelf: 'center',
   },
   role: {
     color: Constants.WHITE,
@@ -327,28 +494,56 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     resizeMode: 'cover',
   },
-  favShelterContainer: {
-    flex: 1,
-    margin: 10,
+  ShelterContainer: {
+    paddingVertical: 12,
     alignItems: 'center',
-    maxWidth: Dimensions.get('window').width / 3 - 20, 
   },
   
-  favShelterImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,  
+  ShelterImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 70,  
     marginBottom: 5,
     resizeMode: 'cover',
     borderWidth: 1,
     borderColor: '#ff7f09',
   },
   
-  favShelterName: {
-    fontSize: 14,
+  ShelterName: {
+    marginTop: 10,
+    fontSize: 18,
     fontWeight: '500',
     color: 'black',
     textAlign: 'center',
+  },
+
+  addCardTouchable: {
+    alignItems:       "center",
+    justifyContent:   "center",
+    marginRight:      14,          
+    paddingVertical:  12,
+    backgroundColor:  "rgb(255, 231, 146)", 
+    borderRadius:     20,
+  },
+
+
+  addIconWrapper: {
+    width:            80,
+    height:           80,
+    borderRadius:     40,         
+    borderWidth:      2,
+    borderColor:      Constants.DARK_RED,
+    alignItems:       "center",
+    justifyContent:   "center",
+    marginBottom:     8,
+  },
+
+
+  addCardText: {
+    fontSize:    16,
+    fontWeight:  "500",
+    color:       Constants.DARK_RED,
+    textAlign:   "center",
   },
   
   

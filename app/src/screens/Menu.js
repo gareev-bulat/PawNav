@@ -6,6 +6,8 @@ import * as Location from 'expo-location';
 import { MapPrompts } from '../components/MapPrompts';
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as Constants from '../utilities/constants';
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../config/firebase";
 
 
 const Menu = () => {
@@ -24,6 +26,50 @@ const Menu = () => {
 
   };
 
+  const updateShelterInfo = async (currentReg) => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Not signed in");
+
+    const docRef = doc(
+      db,
+      "users",
+      user.uid,
+      "Shelter Information",
+      currentReg
+    );
+
+    await updateDoc(docRef, {
+      shelterStatus: "Published"
+    });
+  };
+
+  const checkRegStatus = async() => {
+    try {
+          const user = auth.currentUser;
+          if (!user) throw new Error("Not signed in");
+
+          const userRef = doc(db, 'users', user.uid)
+          const docSnap = await getDoc(userRef);
+          console.log(docSnap.data().registrationStatus)
+          if (docSnap.exists()){
+            if (docSnap.data().registrationStatus == "Approved"){
+              console.log("APPROVED")
+              await updateDoc(userRef, {
+                registrationStatus: "No registration"
+              });
+              updateShelterInfo(docSnap.data().currentReg);
+            }
+
+
+          } else {
+          console.log("No documents");
+        }
+        }catch(error){
+          console.log("Error:", err);
+        }
+
+  }
+
   const getPermission = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted"){return;}
@@ -33,6 +79,7 @@ const Menu = () => {
     useEffect(() => {
 
       getPermission();
+      checkRegStatus();
 
     }, []);
     return (

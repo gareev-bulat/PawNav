@@ -14,7 +14,7 @@ import { useFonts } from "expo-font";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as Constants from "../../utilities/constants";
 import { auth, db } from "../../../config/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { format } from "date-fns";
 
 const InputPage = ({ navigation }) => {
@@ -61,7 +61,7 @@ const InputPage = ({ navigation }) => {
 
         console.log("Shelter data has been recorded");
         console.log("id: ", docRef.id);
-        navigation.navigate("ImageTemp", { shelterDocId: docRef.id });
+        navigation.navigate("BioInputPage", { shelterDocId: docRef.id });
       } catch (error) {
         Alert.alert("Error. Please try again.");
       }

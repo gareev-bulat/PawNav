@@ -7,6 +7,7 @@ import LocationTemp from "./RollInfoTemplates/LocationTemp";
 import UploadTemp from "./RollInfoTemplates/UploadTemp";
 import EndPage from "./RollInfoTemplates/EndPage";
 import InputPage from "./RollInfoTemplates/InputPage";
+import BioInputPage from "./RollInfoTemplates/BioPage";
 
 import {
   createStackNavigator,
@@ -26,6 +27,7 @@ const RollInfoPagesStack = () => {
     >
       <Stack.Screen name="RollInfoPages" component={RollInfoPages} />
       <Stack.Screen name="ImageTemp" component={ImageTemp} />
+      <Stack.Screen name="BioInputPage" component={BioInputPage} />
       <Stack.Screen name="InputPage" component={InputPage} />
       <Stack.Screen name="UploadTemp" component={UploadTemp} />
       <Stack.Screen name="LocationTemp" component={LocationTemp} />

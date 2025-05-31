@@ -139,6 +139,7 @@ const Maps = ( { navigation } ) => {
     const snap = await getDocs(collectionGroup(db, "Shelter Information"));
     for (const doc of snap.docs) {
       const data = doc.data();
+      if (data.shelterStatus === "Published") {
       shelters.push({
         id: doc.id,
         name: data.shelterName,
@@ -146,7 +147,7 @@ const Maps = ( { navigation } ) => {
         endHours: data.endHours,
         shelterLongitude: data.shelterLongitude,
         shelterLatitude: data.shelterLatitude,
-      })
+      })}
     }
     return shelters;
   };

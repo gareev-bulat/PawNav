@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { db } from "../../config/firebase";
 import { getDocs, collectionGroup } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import * as Constants from '../utilities/constants';
 
 //fetch of all shelters in the app
 
@@ -21,21 +22,26 @@ async function fetchAllShelters() {
   for (const docSnap of snap.docs) {
     // image reference
     const data = docSnap.data();
+    if (data.shelterStatus === "Published") {
     const imageRef = ref(getStorage(), `images/${docSnap.id}/ShelterBanner`);
     const imageURL = await getDownloadURL(imageRef);
     console.log("imageURL", imageURL);
     //
+    
 
     shelters.push({
       imageURL: imageURL,
       id: docSnap.id,
+      shelterBio: data.shelterBio,
       name: data.shelterName,
-      address: "Address",
+      shelterAddress: data.shelterAddress,
+      shelterLatitude: data.shelterLatitude,
+      shelterLongitude: data.shelterLongitude,
       phone: data.phoneNumber,
       capacity: data.animalCapacity,
       startHours: data.startHours,
       endHours: data.endHours,
-    });
+    });}
   }
 
   return shelters;
@@ -53,7 +59,7 @@ const ShelterComponent = ({ shelter, navigation }) => (
 
       <View style={styles.cardContent}>
         <Text style={styles.shelterName}>{shelter.name}</Text>
-        <Text style={styles.shelterDetail}>📍 {shelter.address}</Text>
+        <Text style={styles.shelterDetail}>📍 {shelter.shelterAddress}</Text>
         <Text style={styles.shelterDetail}>📞 {shelter.phone}</Text>
         <Text style={styles.shelterDetail}>
           🏠 Capacity: {shelter.capacity}
@@ -90,7 +96,12 @@ const SheltersMenu = ({ navigation }) => {
     return <Text>Loading shelters…</Text>;
   }
 
-  //console.log(shelters);
+  const filteredShelters = shelters.filter((shelter) => {
+    if (!search.trim()) return true;
+    return shelter.name
+      .toLowerCase()
+      .includes(search.trim().toLowerCase());
+  });
 
   const renderItem = ({ item }) => (
     <ShelterComponent shelter={item} navigation={navigation} />
@@ -104,12 +115,21 @@ const SheltersMenu = ({ navigation }) => {
         onChangeText={setSearch}
         style={styles.searchInput}
       />
-      <FlatList
-        data={shelters}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 16 }}
-      />
+      {filteredShelters.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyTitle}>No shelters found</Text>
+          <Text style={styles.emptySubtitle}>
+            Try adjusting your search
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredShelters}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 16 }}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -147,11 +167,10 @@ const styles = StyleSheet.create({
     borderColor: "#8B0000"
   },
   card: {
-    backgroundColor: "#ffffff",
     borderRadius: 20,
     overflow: "hidden",
     marginBottom: 20,
-    shadowColor: "#000",
+    shadowColor: Constants.DEFAULT_ORANGE,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
@@ -163,13 +182,14 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     padding: 14,
-    backgroundColor: "#faf8ff",
+    backgroundColor: Constants.DEFAULT_ORANGE_BLUR,
   },
   shelterName: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 6,
-    color: "#673ab7",
+    color: Constants.DEFAULT_ORANGE,
+    textShadowColor: Constants.DARK_RED
   },
   shelterDetail: {
     fontSize: 14,
@@ -189,8 +209,9 @@ const styles = StyleSheet.create({
   },
   metaPillText: {
     fontSize: 13,
-    color: "#333",
+    color: Constants.DARK_RED,
   },
+
 });
 
 export default SheltersMenu;

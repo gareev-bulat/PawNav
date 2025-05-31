@@ -1,35 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Keyboard } from 'react-native';
+import { useState } from 'react';
+import { View, TextInput } from 'react-native';
 import * as Constants from '../utilities/constants';
 import PopUpList from './PopUpList';
-
-function dataFetch(address) {
-  const apiKey = 'AIzaSyDCZ1LBNnvoHXK_IZX95lONX4xzAjz4faw';
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-    address
-  )}&key=${apiKey}`;
-
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status !== 'ZERO_RESULTS') {
-        return data.results[0].geometry.location;
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      throw error;
-    });
-}
-
 
 
 const SearchComponent = () => {
   const [text, setText] = useState('');
   const [popupVisible, setPopupVisible] = useState(false);
-
-
-  console.log(text);
 
   return (
     <View style={{ flex: 1 }}>
