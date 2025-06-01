@@ -306,7 +306,7 @@ const UserProfile = ({ navigation }) => {
         )}
 
         <Text style={styles.title}>Favourite Shelters</Text>
-        {Favourites && Favourites.length > 0 && (
+        {Favourites && Favourites.length > 0 ? (
           <>
             <ScrollView
               horizontal={true}
@@ -319,7 +319,10 @@ const UserProfile = ({ navigation }) => {
               ))}
             </ScrollView>
           </>
-        )}
+        ) : (
+          <Text style={styles.text}>No favourite shelters yet.</Text>
+
+        )} 
       </ScrollView>
     </SafeAreaView>
   );
